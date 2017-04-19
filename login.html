@@ -27,16 +27,36 @@
     }
 </style>
 <script>
+    
+    var xmlhttp;
  
     function createRoom() {
-        
+        var name = document.getElementById("make_name").value;
+        if (name.length == 0) {
+            alert("Error: Please enter a username")
+        }
+        else {
+            var code = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 4).toLocaleUpperCase();
+            alert("Room Code: " + code);
+        }
     }
     
     function joinRoom() {
-        
+        var name = document.getElementById("join_name").value;
+        var code = document.getElementById("join_RC").value;
+        if (name.length == 0) {
+            alert("Error: Please enter a username")
+        }
+        else if (code.length != 4) {
+            alert("Error: Please enter a 4-letter code")
+        }
+        else {
+            // If the code matches the room code in the session variable,
+            // Join the session, direct to the loading page,
+            // Feed in values false values for the king.
+        }
     }
- #Add the functionality here
- 
+    
 </script>
 </head>
 <body>
@@ -45,17 +65,17 @@
     <p>Create a Room for Your Group or Join Another Game</p>
     <BR></BR>
     <form>
-        <label for="in_name">Username:</label>
-        <input type = "name" name = "in_name" id = "in_name" maxlength = 12>
+        <label for="make_name">Username:</label>
+        <input type = "name" name = "make_name" id = "make_name" maxlength = 12>
         <BR></BR>
         <button type = "button" onclick = "createRoom()">Create Room</button>
         <BR></BR>
         <BR></BR>
-        <label for="in_name">Username:</label>
-        <input type = "name" name = "in_name" id = "in_name" maxlength = 12>
+        <label for="join_name">Username:</label>
+        <input type = "name" name = "join_name" id = "join_name" maxlength = 12>
         <BR></BR>
-        <label for="in_msg">Room Code:</label>
-        <input type = "roomcode" name = "in_RC" id = "in_RC" maxlength = 4>
+        <label for="join_RC">Room Code:</label>
+        <input type = "roomcode" name = "join_RC" id = "join_RC" maxlength = 4>
         <BR></BR>
         <button type = "button" onclick = "joinRoom()">Join Room</button>
     </form>

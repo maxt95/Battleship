@@ -37,7 +37,22 @@
         }
         else {
             var code = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 4).toLocaleUpperCase();
-            alert("Room Code: " + code);
+            var info = {
+                Code: code,
+                Name: name
+            };
+            info.Name = name.value;
+            info.Code = code.value;  
+            xmlhttp = new XMLHttpRequest();
+            // It doesn't get past this?
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    alert("Room Code: " + code);
+                    xmlhttp.open("POST", "createRoom.php", true);
+                    xmlhttp.send(JSON.stringify(info));
+                    window.location = '/loading.html';
+                }
+            };
         }
     }
     
@@ -51,10 +66,52 @@
             alert("Error: Please enter a 4-letter code")
         }
         else {
-            // If the code matches the room code in the session variable,
-            // Join the session, direct to the loading page,
-            // Feed in values false values for the king.
+            if (checkRoomNum(code) == false) {   // If the player's code matches the session variable
+                alert("Error: Please enter a correct room code");
+            }
+            else {
+                if (checkPlayerName(name) == false) {
+                    alert("Error: Please enter a unique player name")
+                }
+                else {
+                    
+                    xmlhttp = new XMLHttpRequest();
+                    xmlhttp.onreadystatechange = function() {
+                        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                            xmlhttp.open("POST", "joinRoom.php", true);
+                            xmlhttp.send(JSON.stringify(name));
+                            window.location = '/loading.html';
+                        }
+                    };
+                }
+            }
         }
+    }
+    
+    function checkRoomNumber(code) {
+        var match = false;
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                xmlhttp.open("POST", "checkNum.php", true);
+                xmlhttp.send(JSON.stringify(code));
+                match = JSON.parse(xmlhttp.responseText);
+            }
+        };
+        return match;
+    }
+    
+    function checkPlayerName(name) {
+        var match = false;
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                xmlhttp.open("POST", "checkName.php", true);
+                xmlhttp.send(JSON.stringify(name));
+                match = JSON.parse(xmlhttp.responseText);
+            }
+        };
+        return match;
     }
     
 </script>

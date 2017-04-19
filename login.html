@@ -1,5 +1,64 @@
+<!DOCTYPE html>
 <html>
-	<body>
-	this is an example.
-	</body>
+<head>
+<title>NAXJO Battleship</title>
+<style>
+    body, html {
+        font-size: 28px;
+        font-family: monospace;
+        background-color: lightgrey;
+    }
+    header {
+        background-color: dodgerblue;
+        text-align: center;
+        display: table-cell;
+        vertical-align: middle;
+        
+    }
+    button {
+        font-size: 20px;
+        font-family: monospace;
+        background-color: powderblue;
+    }
+    input {
+        font-size: 20px;
+        font-family: monospace;
+        background-color: whitesmoke;
+    }
+</style>
+<script>
+ 
+    function createRoom() {
+        
+    }
+    
+    function joinRoom() {
+        
+    }
+ #Add the functionality here
+ 
+</script>
+</head>
+<body>
+    <center>
+    <H1>Welcome to NAXJO Battleship</H1>
+    <p>Create a Room for Your Group or Join Another Game</p>
+    <BR></BR>
+    <form>
+        <label for="in_name">Username:</label>
+        <input type = "name" name = "in_name" id = "in_name" maxlength = 12>
+        <BR></BR>
+        <button type = "button" onclick = "createRoom()">Create Room</button>
+        <BR></BR>
+        <BR></BR>
+        <label for="in_name">Username:</label>
+        <input type = "name" name = "in_name" id = "in_name" maxlength = 12>
+        <BR></BR>
+        <label for="in_msg">Room Code:</label>
+        <input type = "roomcode" name = "in_RC" id = "in_RC" maxlength = 4>
+        <BR></BR>
+        <button type = "button" onclick = "joinRoom()">Join Room</button>
+    </form>
+    </center>
+</body>
 </html>

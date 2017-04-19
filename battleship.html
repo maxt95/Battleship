@@ -58,25 +58,21 @@
 		    var tr = document.createElement('tr');   
 
 		    var td1 = document.createElement('td');
-		    td1.id = "td1";
 		    var td2 = document.createElement('td');
-		    td1.id = "td2";
 		    var td3 = document.createElement('td');
-		    td1.id = "td3";
 		    var td4 = document.createElement('td');
-		    td1.id = "td4";
 		    var td5 = document.createElement('td');
-		    td1.id = "td5";
+
 		    var td6 = document.createElement('td');
-		    td1.id = "td6";
+		
 		    var td7 = document.createElement('td');
-		    td1.id = "td7";
+
 		    var td8 = document.createElement('td');
-		    td1.id = "td8";
+
 		    var td9 = document.createElement('td');
-		    td1.id = "td9";
+		   
 		    var td10 = document.createElement('td');
-		    td1.id = "td10";
+		
 
 		    var text1 = document.createTextNode('');
 		    var text2 = document.createTextNode('');
@@ -102,7 +98,7 @@
 		if (table != null) {
 		    for (var i = 0; i < table.rows.length; i++) {
 		        for (var j = 0; j < table.rows[i].cells.length; j++)
-		        table.rows[i].cells[j].onclick = function () {
+		        	table.rows[i].cells[j].onclick = function () {
 		            tableText(this, i, j);
 		        };
 		    }
@@ -110,9 +106,10 @@
 
 		
 	}
-	function tableText(tableCell,j) {
+	function tableText(tableCell,i, j) {
 		    var x = document.getElementById("battleshipTable").getElementsByTagName("td");
-		    x[i].style.backgroundColor = "red";
+		    tableCell.style.backgroundColor = "red";
+		    
 		}
 </script>
 </head>

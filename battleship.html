@@ -1,15 +1,24 @@
 <html>
 <head>
 <style>
+	body {
+		background-color: #BFBFBF;
+	}
 	table {
 		text-align: center;
+		width: 60%;
+		height: 90%;
+		background-color: #1F4788;
 	}
 	table, td {
-		border: 2px solid black;
+		border: 1px solid black;
 
 	}
 	td {
-		background-color: blue;
+		background-color: #89C4F4;
+	}
+	td:hover {
+		background-color: #4B77BE;
 	}
 	.left-panel {
 
@@ -27,6 +36,7 @@
 		display: inline-block;
 		font-size: 2em;
 		text-align: center;
+
 		
 	}
 	.center-panel {
@@ -35,12 +45,79 @@
 		
 	}
 	.gamescreen {
-		background-color: grey;
+		
 		font-family: monospace;
 	}
 </style>
+<script>
+	
+	function createTable() {
+		var table = document.createElement('table');
+		table.id = "battleshipTable";
+		for (var i = 1; i < 11; i++){
+		    var tr = document.createElement('tr');   
+
+		    var td1 = document.createElement('td');
+		    td1.id = "td1";
+		    var td2 = document.createElement('td');
+		    td1.id = "td2";
+		    var td3 = document.createElement('td');
+		    td1.id = "td3";
+		    var td4 = document.createElement('td');
+		    td1.id = "td4";
+		    var td5 = document.createElement('td');
+		    td1.id = "td5";
+		    var td6 = document.createElement('td');
+		    td1.id = "td6";
+		    var td7 = document.createElement('td');
+		    td1.id = "td7";
+		    var td8 = document.createElement('td');
+		    td1.id = "td8";
+		    var td9 = document.createElement('td');
+		    td1.id = "td9";
+		    var td10 = document.createElement('td');
+		    td1.id = "td10";
+
+		    var text1 = document.createTextNode('');
+		    var text2 = document.createTextNode('');
+
+		    tr.appendChild(td1);
+		    tr.appendChild(td2);
+		    tr.appendChild(td3);
+		    tr.appendChild(td4);
+		    tr.appendChild(td5);
+		    tr.appendChild(td6);
+		    tr.appendChild(td7);
+		    tr.appendChild(td8);
+		    tr.appendChild(td9);
+		    tr.appendChild(td10);
+
+		    table.appendChild(tr);
+		}
+		document.body.appendChild(table);
+
+	}
+	function tableClick() {
+		var table = document.getElementById("battleshipTable");
+		if (table != null) {
+		    for (var i = 0; i < table.rows.length; i++) {
+		        for (var j = 0; j < table.rows[i].cells.length; j++)
+		        table.rows[i].cells[j].onclick = function () {
+		            tableText(this, i, j);
+		        };
+		    }
+		}
+
+		
+	}
+	function tableText(tableCell,j) {
+		    var x = document.getElementById("battleshipTable").getElementsByTagName("td");
+		    x[i].style.backgroundColor = "red";
+		}
+</script>
 </head>
 	<body>
+		
 		<div class="gamescreen">
 		<div style="font-size: 50px; text-align: center;">
 			NAXJO Battleship
@@ -52,329 +129,10 @@
 		
 		
 		<div class="center-panel">
-			<table style="width:100%; height:90%">
-			<tr>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			</tr>
-			<tr>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			</tr>
-			<tr>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			</tr>
-			<tr>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			</tr>
-			<tr>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			</tr>
-			<tr>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			</tr>
-			<tr>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			</tr>
-			<tr>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			</tr>
-			<tr>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			</tr>
-			<tr>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			<td>
-
-			</td>
-			</tr>
-
-			</table>
+			<script>
+				createTable();
+				tableClick();
+			</script>
 		</div>
 		<div class="right-panel">
 			Player 1: 20 <br>

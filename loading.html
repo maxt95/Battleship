@@ -4,7 +4,7 @@
 <title>NAXJO Battleship ... Loading</title>
 <style>
     body, html {
-        font-size: 28px;
+        font-size: 24px;
         font-family: monospace;
         background-color: darkgrey;
     }
@@ -23,7 +23,26 @@
 </style>
 <script>
     
-    
+    var xmlhttp;
+    window.onload = function first() {
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                var code = JSON.parse(xmlhttp.responseText);
+                var txt = "Room Code: ";
+                for (var key in code) {
+                    txt += code[key].concat("<BR></BR>");
+                    if (key == 0) {
+                        txt += "Players:".concat("<BR></BR>");
+                    }
+                }
+                document.getElementById("roomnum").innerHTML = txt;
+            }
+        };
+        xmlhttp.open("GET", "getInfo.php", true);
+        xmlhttp.send();
+        window.setInterval(first, 5000);
+    };
  
     function startGame() {
         
@@ -34,13 +53,10 @@
 <body>
     <center>
     <H1>NAXJO Battleship</H1>
-    <label id = "roomnum">Room: </label>
     <p>Waiting for More Players to Join...</p>
+    <text id = "roomnum"></text>
     <BR></BR>
     <form>
-        <DIV>
-            <table id = "Players"></table>
-        </DIV>
         <BR></BR>
         <button type = "button" onclick = "startGame()">Launch Game</button>
         <BR></BR>

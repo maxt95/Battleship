@@ -81,7 +81,6 @@
                 else {
                     
                     xmlhttp = new XMLHttpRequest();
-                    alert("Made it this far");
                     xmlhttp.onreadystatechange = function() {
                         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                             // alert
@@ -136,7 +135,6 @@
                 match = true;
             }
         }
-        alert(match);
         return match;
     }
     

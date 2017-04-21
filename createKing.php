@@ -4,7 +4,7 @@
         session_start();
     }
     $kingName = file_get_contents("php://input");
-    $_SESSION[$kingName] = array($kingName, true); // add values for ship grid, points, etc.
+    $_SESSION[$kingName] = array($kingName, true, 0, 4); // add values for ship grid, points, etc.
     $_SESSION['NumPlayers'] = 1;
     $array = $_SESSION['Info'];
     $array[count($array)] = $kingName;

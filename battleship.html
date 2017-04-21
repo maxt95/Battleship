@@ -116,11 +116,11 @@
 		
 	    window.onload = function first() {
 	        xmlhttp = new XMLHttpRequest();
-	        xmlhttp.open("POST", "createUser.php", true);
+	        xmlhttp.open("POST", "getScores.php", true);
 	        xmlhttp.onreadystatechange = function() {
 	            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 	                score = JSON.parse(xmlhttp.responseText);
-	                alert(score);
+	                
 	                document.getElementById("userScore").innerHTML = score;
 	            }
 	            
@@ -132,6 +132,87 @@
 	    };
 	    
 	 	return score;   
+	}
+	function getOtherScores(player) {
+		var xmlhttp;
+		
+	    window.onload = function first() {
+	        xmlhttp = new XMLHttpRequest();
+	        xmlhttp.open("POST", "getScores.php", true);
+	        xmlhttp.onreadystatechange = function() {
+	            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	                score = JSON.parse(xmlhttp.responseText);
+	                
+	                document.getElementById("playerscores").innerHTML = score;
+	            }
+	            
+	        };
+	        
+	        
+	        xmlhttp.send(JSON.stringify(player));
+	        
+	    };
+	    
+	 	return score;   
+	}
+
+	function getPlayers() {
+		var player;
+		var xmlhttp;
+
+		xmlhttp = new XMLHttpRequest();
+		
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					var code = JSON.parse(xmlhttp.responseText);
+                	var txt = "";
+                	for (var key = 1; key < code.length;key++) {
+                    	txt += code[key].concat(":<br></br>");
+                    	if (key == 0) {
+                        	
+                    	}
+                	}
+	          
+	                document.getElementById("playernames").innerHTML = txt;
+	            }
+		};
+		xmlhttp.open("GET", "getInfo.php", true);
+		xmlhttp.send();
+		
+	}
+
+	function getOtherPlayers(player) {
+		var player;
+		var xmlhttp;
+
+		xmlhttp = new XMLHttpRequest();
+		var cook = readCookie('username');
+		alert(cook);
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					var code = JSON.parse(xmlhttp.responseText);
+                	var txt = "";
+                	for (var key = 1; key < code.length;key++) {
+                		if(cook == key)
+                		{
+
+                		}
+                		else
+                		{
+                			txt += code[key].concat(":<br></br>");
+	                    	if (key == 0) {
+	                        	
+	                    	}
+                		}
+                    	
+                	}
+	          
+	                document.getElementById("playernames").innerHTML = txt;
+	            }
+		};
+		xmlhttp.open("GET", "getInfo.php", true);
+		xmlhttp.send();
+		
 	}
 
 	function readCookie(name) {
@@ -175,10 +256,25 @@
 			</script>
 		</div>
 		<div class="right-panel">
+			<div id="playernames" style="display:block;">
+				<script>
+					var player = getOtherPlayers();
+					document.write(player);
+					
+				</script>
+
+				
+			</div>
+			<div id="playerscores" style="display:block;">
+					<script>
+						var score = getOtherScores(player);
+						document.write(score);
+					</script>
+					t
+					<br>
+					</br>
+			</div>
 			
-			Player 1: 20 <br>
-			Player 2: 30 <br>
-			Player 3: 50 <br>
 		</div>
 		</div>
 	</body>

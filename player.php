@@ -3,7 +3,8 @@
     if (!isset($_SESSION)) {
         session_start();
     }
-
-    echo json_encode($_SESSION['Name']);
+    $name = $_SESSION['Info'];
+    
+    echo json_encode($name);
 
 ?>

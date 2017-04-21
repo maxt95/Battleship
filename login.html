@@ -72,6 +72,7 @@
             };
             xmlhttp.open("POST", "createKing.php", true);
             xmlhttp.send(name);
+            eraseCookie("username");
             createCookie("username",name,7);
 
             window.location = 'loading.html';
@@ -106,6 +107,7 @@
                     };
                     xmlhttp.open("POST", "joinRoom.php", true);
                     xmlhttp.send(JSON.stringify(name));
+                    eraseCookie("username");
                     createCookie("username",name,7);
                     window.location = 'loading.html';
                 }
@@ -165,12 +167,18 @@
     }
     else var expires = "";
     document.cookie = name+"="+value+expires+"; path=/";
+
+
+}
+
+function eraseCookie(name) {
+    createCookie(name,"",-1);
 }
     
 </script>
 </head>
 <body>
-    
+
     <center>
     <H1>Welcome to NAXJO Battleship</H1>
     <p>Create a Room for Your Group or Join Another Game</p>

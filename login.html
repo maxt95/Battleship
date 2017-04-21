@@ -34,13 +34,16 @@
     function createUser() {
         var name = document.getElementById("make_name").value;
         xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("POST", "joinRoom.php", true);
+        xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                 //alert("Room Code: " + code);
             }
         };
-        xmlhttp.open("POST", "createUser.php", true);
-        xmlhttp.send(name);
+        
+        xmlhttp.send("MEEE");
+        
     }
 
     // Creates the host player and the game room
@@ -70,6 +73,7 @@
             xmlhttp.open("POST", "createKing.php", true);
             xmlhttp.send(name);
             createCookie("username",name,7);
+            
             window.location = 'loading.html';
         }
     }
@@ -190,9 +194,7 @@
     <p>Create a Room for Your Group or Join Another Game</p>
     <BR></BR>
     <form>
-        <label for="make_name">Username:</label>
-        <input type="name" name="make_name" id="make_name" maxlength=12>
-        <br></br>
+
         <label for="make_name">Username:</label>
         <input type = "name" name = "make_name" id = "make_name" maxlength = 12>
         <BR></BR>

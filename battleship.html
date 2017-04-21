@@ -116,6 +116,7 @@
 		
 	    window.onload = function first() {
 	        xmlhttp = new XMLHttpRequest();
+	        xmlhttp.open("POST", "createUser.php", true);
 	        xmlhttp.onreadystatechange = function() {
 	            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 	                score = JSON.parse(xmlhttp.responseText);
@@ -125,8 +126,8 @@
 	            
 	        };
 	        
-	        xmlhttp.open("GET", "joinRoom.php", true);
-	        xmlhttp.send();
+	        var cook = readCookie('username');
+	        xmlhttp.send(JSON.stringify(cook));
 	        
 	    };
 	    
@@ -154,13 +155,10 @@
 		</div>
 		<div class="left-panel" style="text-align: center;">
 			<script>
-			var x = readCookie('username')
+			var x = readCookie('username');
 
 			document.write(x);
 			</script>'s Score:
-			1001
-			<br>
-			</br>
 			<div id="userScore">
 				<script>
 				var score = getScores();

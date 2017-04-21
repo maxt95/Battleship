@@ -94,6 +94,24 @@
         }
     }
     
+    function maxPlayers() {
+        var players = null;
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                players = xmlhttp.responseText;
+            }
+        }
+        xmlhttp.open("GET", "getPlayerCount.php", false);
+        xmlhttp.send(null);
+        if (players >= 15) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
     function checkRoomNumber(code) {
         var interval;
         var result = null;
@@ -102,7 +120,7 @@
         xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                temp = JSON.parse(xmlhttp.responseText);
+                var temp = JSON.parse(xmlhttp.responseText);
                 codeMatch = code.localeCompare(temp[0]);
                 result = codeMatch;
             }

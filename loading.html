@@ -24,6 +24,8 @@
 <script>
     
     var xmlhttp;
+    var xmlhttp2;
+    var xmlhttp3;
     window.onload = function first() {
         var cook = document.cookie;
         
@@ -43,12 +45,47 @@
         };
         xmlhttp.open("GET", "getInfo.php", true);
         xmlhttp.send();
+        var launch = checkLaunch();
+        
+        if (!launch == false) {
+            window.location = "battleship.html";
+        }
         window.setInterval(first, 5000);
     };
  
     function startGame() {
         //send info to next page
-        window.location = "battleship.html";
+        var dummy = setLaunch();
+        //window.location = "battleship.html";
+    }
+    
+    function setLaunch() {
+        xmlhttp2 = new XMLHttpRequest();
+        xmlhttp2.onreadystatechange = function() {
+            if (xmlhttp2.readyState == 4 && xmlhttp2.status == 200) {
+                //alert("Room Code: " + code);
+            }
+        };
+        xmlhttp2.open("POST", "setLaunch.php", true);
+        xmlhttp2.send(JSON.stringify(true));
+        return true;
+    }
+    
+    function checkLaunch() {
+        var result = null;
+        xmlhttp3 = new XMLHttpRequest();
+        xmlhttp3.onreadystatechange = function() {
+            if (xmlhttp3.readyState == 4 && xmlhttp3.status == 200) {
+                result = JSON.parse(xmlhttp3.responseText);
+            }
+        };
+        xmlhttp3.open("GET", "checkLaunch.php", false);
+        xmlhttp3.send();
+        return result;
+    }
+    
+    function makeShips() {
+        
     }
      
 </script>

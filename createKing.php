@@ -9,6 +9,7 @@
     $array = $_SESSION['Info'];
     $array[count($array)] = $kingName;
     $_SESSION['Info'] = $array;
+    $_SESSION['Launch'] = false;
 
     echo $_SESSION['Info'];
 ?>

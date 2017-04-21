@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,6 +31,18 @@
     
     var xmlhttp;
     
+    function createUser() {
+        var name = document.getElementById("make_name").value;
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                //alert("Room Code: " + code);
+            }
+        };
+        xmlhttp.open("POST", "createUser.php", true);
+        xmlhttp.send(name);
+    }
+
     // Creates the host player and the game room
     function createRoom() {
         var name = document.getElementById("make_name").value;
@@ -56,6 +69,7 @@
             };
             xmlhttp.open("POST", "createKing.php", true);
             xmlhttp.send(name);
+            createCookie("username",name,7);
             window.location = 'loading.html';
         }
     }
@@ -88,6 +102,7 @@
                     };
                     xmlhttp.open("POST", "joinRoom.php", true);
                     xmlhttp.send(JSON.stringify(name));
+                    createCookie("username",name,7);
                     window.location = 'loading.html';
                 }
             }
@@ -155,15 +170,29 @@
         }
         return match;
     }
+
+    function createCookie(name,value,days) {
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime()+(days*24*60*60*1000));
+        var expires = "; expires="+date.toGMTString();
+    }
+    else var expires = "";
+    document.cookie = name+"="+value+expires+"; path=/";
+}
     
 </script>
 </head>
 <body>
+    
     <center>
     <H1>Welcome to NAXJO Battleship</H1>
     <p>Create a Room for Your Group or Join Another Game</p>
     <BR></BR>
     <form>
+        <label for="make_name">Username:</label>
+        <input type="name" name="make_name" id="make_name" maxlength=12>
+        <br></br>
         <label for="make_name">Username:</label>
         <input type = "name" name = "make_name" id = "make_name" maxlength = 12>
         <BR></BR>

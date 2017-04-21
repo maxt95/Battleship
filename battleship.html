@@ -50,7 +50,7 @@
 	}
 </style>
 <script>
-	
+	var score = "hi";
 	function createTable() {
 		var table = document.createElement('table');
 		table.id = "battleshipTable";
@@ -111,6 +111,42 @@
 		    tableCell.style.backgroundColor = "red";
 		    
 		}
+	function getScores() {
+		var xmlhttp;
+		
+	    window.onload = function first() {
+	        xmlhttp = new XMLHttpRequest();
+	        xmlhttp.onreadystatechange = function() {
+	            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	                score = this.responseText;
+	                alert(score);
+	            }
+	            else
+	            {
+	            	score="fail";
+	            }
+	            
+	        };
+	        
+	        xmlhttp.open("GET", "scores.php", true);
+	        xmlhttp.send();
+	        
+	    };
+	    
+	 	return score;   
+	}
+
+	function readCookie(name) {
+		var nameEQ = name + "=";
+		var ca = document.cookie.split(';');
+		for(var i=0;i < ca.length;i++) {
+			var c = ca[i];
+			while (c.charAt(0)==' ') c = c.substring(1,c.length);
+			if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+		}
+	return null;
+}
+
 </script>
 </head>
 	<body>
@@ -120,8 +156,18 @@
 			NAXJO Battleship
 		</div>
 		<div class="left-panel" style="text-align: center;">
-			Your Score:
-			100
+			<script>
+			var x = readCookie('username')
+
+			document.write(x);
+			</script>'s Score:
+			1001
+			<br>
+			</br>
+			<script>
+			var score = getScores();
+			document.write(score);
+			</script>
 		</div>
 		
 		
@@ -132,6 +178,7 @@
 			</script>
 		</div>
 		<div class="right-panel">
+			
 			Player 1: 20 <br>
 			Player 2: 30 <br>
 			Player 3: 50 <br>

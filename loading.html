@@ -56,6 +56,8 @@
     function startGame() {
         //send info to next page
         var dummy = setLaunch();
+        var truth = isKing();
+        alert(truth);
         //window.location = "battleship.html";
     }
     
@@ -82,6 +84,26 @@
         xmlhttp3.open("GET", "checkLaunch.php", false);
         xmlhttp3.send();
         return result;
+    }
+    
+    function isKing() {
+        var result = null;
+        xmlhttp4 = new XMLHttpRequest();
+        xmlhttp4.onreadystatechange = function() {
+            if (xmlhttp4.readyState == 4 && xmlhttp4.status == 200) {
+                temp = JSON.parse(xmlhttp4.responseText);
+                result = temp[1];
+            }
+        };
+        xmlhttp4.open("GET", "getInfo.php", false);
+        xmlhttp4.send();
+        var cook = readCookie('username');
+        if (cook === result) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     
     function makeShips() {

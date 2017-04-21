@@ -3,7 +3,7 @@
     if (!isset($_SESSION)) {
         session_start();
     }
-    $name = "php variable";
-    echo json_encode($name);
+    
+    echo json_encode($_SESSION[$name]);
 
 ?>

@@ -50,7 +50,7 @@
 	}
 </style>
 <script>
-	var score = "hi";
+	var score = "";
 	function createTable() {
 		var table = document.createElement('table');
 		table.id = "battleshipTable";
@@ -118,17 +118,14 @@
 	        xmlhttp = new XMLHttpRequest();
 	        xmlhttp.onreadystatechange = function() {
 	            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-	                score = this.responseText;
+	                score = JSON.parse(xmlhttp.responseText);
 	                alert(score);
-	            }
-	            else
-	            {
-	            	score="fail";
+	                document.getElementById("userScore").innerHTML = score;
 	            }
 	            
 	        };
 	        
-	        xmlhttp.open("GET", "scores.php", true);
+	        xmlhttp.open("GET", "joinRoom.php", true);
 	        xmlhttp.send();
 	        
 	    };
@@ -164,10 +161,12 @@
 			1001
 			<br>
 			</br>
-			<script>
-			var score = getScores();
-			document.write(score);
-			</script>
+			<div id="userScore">
+				<script>
+				var score = getScores();
+				document.write(score);
+				</script>
+			</div>
 		</div>
 		
 		

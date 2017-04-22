@@ -10,6 +10,7 @@
     $array[count($array)] = $kingName;
     $_SESSION['Info'] = $array;
     $_SESSION['Launch'] = false;
+    $_SESSION['InGame'] = false;
 
     echo $_SESSION['Info'];
 ?>

@@ -117,7 +117,7 @@
                     else {
                         message = message + "Pair (" + x + "," + y + ") is new.\n"; 
                     }
-                    var Sa = [x,y,0,names[i]];     // X, Y, Status, PlayerName for array
+                    var Sa = [x,y,1,names[i]];     // X, Y, Status, PlayerName for array
                     var pick = Math.floor(Math.random() * 2);
                     if (pick == 1) {    // Horizontal  
                         y = y + 1;
@@ -159,7 +159,7 @@
                             }
                         }
                     }
-                    var Sb = [x,y,0,names[i]];     // X, Y, Status, PlayerName for array
+                    var Sb = [x,y,1,names[i]];     // X, Y, Status, PlayerName for array
                     if (startOver == false) {
                         findPair = false;
                         taken[count] = [Sa[0],Sa[1]];

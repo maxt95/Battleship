@@ -108,8 +108,8 @@
                     var startOver = false;
                     var x = Math.floor(Math.random() * 9);
                     var y = Math.floor(Math.random() * 9);
-                    x = x + 1;
-                    y = y + 1;
+                    x = x;
+                    y = y;
                     if (inArray(x,y,taken,count)) {
                         message = message + "Pair (" + x + "," + y + ") is taken. Going again...\n"; 
                         startOver = true;
@@ -117,21 +117,21 @@
                     else {
                         message = message + "Pair (" + x + "," + y + ") is new.\n"; 
                     }
-                    var Sa = [x,y,0,names[i]];     // X, Y, Status, PlayerName for array
+                    var Sa = [x,y,1,names[i]];     // X, Y, Status, PlayerName for array
                     var pick = Math.floor(Math.random() * 2);
                     if (pick == 1) {    // Horizontal  
                         y = y + 1;
                         if (inArray(x,y,taken,count)) {
                             message = message + "Pair (" + x + "," + y + ") is taken. Going again...\n"; 
                             y = y - 2;
-                            if (inArray(x,y,taken,count) || y == 0) {
+                            if (inArray(x,y,taken,count) || y == -1) {
                                 message = message + "Pair (" + x + "," + y + ") is taken. Going again...\n"; 
                                 y = y + 1;
                                 x = x + 1;
                                 if (inArray(x,y,taken,count)) {
                                     message = message + "Pair (" + x + "," + y + ") is taken. Going again...\n"; 
                                     x = x - 2;
-                                    if (inArray(x,y,taken,count) || x == 0) {
+                                    if (inArray(x,y,taken,count) || x == -1) {
                                         message = message + "Pair (" + x + "," + y + ") is taken. Starting over...\n"; 
                                         startOver = true;
                                     }
@@ -144,14 +144,14 @@
                         if (inArray(x,y,taken,count)) {
                             message = message + "Pair (" + x + "," + y + ") is taken. Going again...\n"; 
                             x = x - 2;
-                            if (inArray(x,y,taken,count) || x == 0) {
+                            if (inArray(x,y,taken,count) || x == -1) {
                                 message = message + "Pair (" + x + "," + y + ") is taken. Going again...\n"; 
                                 x = x + 1;
                                 y = y + 1;
                                 if (inArray(x,y,taken,count)) {
                                     message = message + "Pair (" + x + "," + y + ") is taken. Going again...\n"; 
                                     y = y - 2;
-                                    if (inArray(x,y,taken,count) || y == 0) {
+                                    if (inArray(x,y,taken,count) || y == -1) {
                                         message = message + "Pair (" + x + "," + y + ") is taken. Starting over...\n"; 
                                         startOver = true;
                                     }
@@ -159,7 +159,7 @@
                             }
                         }
                     }
-                    var Sb = [x,y,0,names[i]];     // X, Y, Status, PlayerName for array
+                    var Sb = [x,y,1,names[i]];     // X, Y, Status, PlayerName for array
                     if (startOver == false) {
                         findPair = false;
                         taken[count] = [Sa[0],Sa[1]];

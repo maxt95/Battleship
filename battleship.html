@@ -50,6 +50,7 @@
 	}
 </style>
 <script>
+    var xmlhttp4;
 	var score = "";
 	function createTable() {
 		var table = document.createElement('table');
@@ -102,6 +103,28 @@
 
 		
 	}
+    
+    function getNames() {               // Use this for a full array of all player names -- may help?
+        var players = getPlayerLimit();
+        xmlhttp4 = new XMLHttpRequest();
+        xmlhttp4.onreadystatechange = function() {
+            if (xmlhttp4.readyState == 4 && xmlhttp4.status == 200) {
+                result = JSON.parse(xmlhttp4.responseText);
+            }
+        };
+        xmlhttp4.open("GET", "getInfo.php", false);
+        xmlhttp4.send();
+        var array = new Array(players);
+        var count = 0;
+        for (key in result) {
+            if (key != 0) {
+                array[count] = result[key];
+                count++;
+            }
+        }
+        return array;
+    }
+    
 	function tableText(tableCell,i, j) {
 		    var x = document.getElementById("battleshipTable").getElementsByTagName("td");
 		    tableCell.style.backgroundColor = "red";
@@ -304,11 +327,10 @@
 						document.write(score);
 					</script>
 					t
-					<br>
-					</br>
+					<BR>
+					</BR>
 			</div>
 			
-		</div>
 		</div>
 	</body>
 	<footer style="background-color: grey;">

@@ -8,7 +8,7 @@
     $result = 1;
     $x;
     $y;
-    $finalArray[];
+    $finalArray;
     $count = 0;
     for($i = 0; $i < sizeof($ships); $i++) #check ship array
     {

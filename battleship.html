@@ -51,7 +51,11 @@
 </style>
 <script>
 
-	
+	window.onload = function first() {
+		updateShip();
+
+		window.setInterval(first, 5000);
+	}
 
     var xmlhttp4;
 	var score = "";
@@ -104,7 +108,7 @@
 
 		        	table.rows[i].cells[j].onclick = function () {
 		            //tableText(this, i, j);
-		            alert('My position in table is: '+this.cellIndex+'x'+this.parentNode.rowIndex);
+		            //alert('My position in table is: '+this.cellIndex+'x'+this.parentNode.rowIndex);
 		            fire(this,this.cellIndex, this.parentNode.rowIndex);
 		        };
 		    }
@@ -170,7 +174,7 @@
 	function tableText(tableCell,status) {
 		    var x = document.getElementById("battleshipTable").getElementsByTagName("td");
 		    
-		    alert(status);
+		    //alert(status);
 
 		    if(status == "hit")
 		    {
@@ -189,12 +193,13 @@
 		tableCell.style.backgroundColor = "grey";
 	}
 
-	function updateShips() {
+	function updateShip() {
+		var table = document.getElementById("battleshipTable");
 		xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function() {
 			if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 				var status = JSON.parse(xmlhttp.responseText);
-				alert(status);
+				
 				for(var i = 0; i < status.length; i++)
 				{
 					var x = status[i][0];
@@ -275,7 +280,7 @@
 		var y = y;
 		xmlhttp.onreadystatechange = function() {
 			if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-				alert(JSON.parse(xmlhttp.responseText));
+				//alert(JSON.parse(xmlhttp.responseText));
 				result = JSON.parse(xmlhttp.responseText);
 				tableText(both,result);
 
@@ -451,7 +456,7 @@
 					<BR>
 					</BR>
 			</div>
-			<button type = "button" onclick = "updateShips()">Update Yo ship</button>
+			<button type = "button" onclick = "updateShip()">Update Yo ship</button>
 			
 		</div>
 	</body>

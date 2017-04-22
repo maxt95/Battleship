@@ -50,8 +50,12 @@
 	}
 </style>
 <script>
+
+	
+
     var xmlhttp4;
 	var score = "";
+	var count = 0;
 	function createTable() {
 		var table = document.createElement('table');
 		table.id = "battleshipTable";
@@ -85,7 +89,12 @@
 		    table.appendChild(tr);
 		}
 		document.body.appendChild(table);
-		populateShips();
+
+		
+		getPlayerCount();
+		
+		
+		
 	}
 	function tableClick() {
 		var table = document.getElementById("battleshipTable");
@@ -94,19 +103,52 @@
 		        for (var j = 0; j < table.rows[i].cells.length; j++)
 
 		        	table.rows[i].cells[j].onclick = function () {
-		            tableText(this, i, j);
+		            //tableText(this, i, j);
 		            alert('My position in table is: '+this.cellIndex+'x'+this.parentNode.rowIndex);
-		            fire(this.cellIndex, this.parentNode.rowIndex);
+		            fire(this,this.cellIndex, this.parentNode.rowIndex);
 		        };
 		    }
 		}
 
 		
 	}
+	function storeCount(num) {
+		count = num;
+		
+		count = count*4;
+		for(var j = 0; j < count; j++)
+		{
+			populateShips();
+		}
+	}
+	function getPlayerCount()
+	{
+		var result;
+		
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function() {
+			if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				result = JSON.parse(xmlhttp.responseText);
+				
+				for(var i = 1; i < result.length; i++)
+				{
+					count++;
+				}
+				
+				storeCount(count);
+			}
+			
+		};
+		
+
+		xmlhttp.open("GET", "getInfo.php", true);
+		xmlhttp.send();
+		
+	}
     
     function getNames() {               // Use this for a full array of all player names -- may help?
         var players = getPlayerLimit();
-        xmlhttp4 = new XMLHttpRequest();
+        var xmlhttp4 = new XMLHttpRequest();
         xmlhttp4.onreadystatechange = function() {
             if (xmlhttp4.readyState == 4 && xmlhttp4.status == 200) {
                 result = JSON.parse(xmlhttp4.responseText);
@@ -125,44 +167,122 @@
         return array;
     }
     
-	function tableText(tableCell,i, j) {
+	function tableText(tableCell,status) {
 		    var x = document.getElementById("battleshipTable").getElementsByTagName("td");
-		    tableCell.style.backgroundColor = "red";
 		    
+		    alert(status);
+
+		    if(status == "hit")
+		    {
+		    	tableCell.style.backgroundColor = "red";
+		    }
+		    if(status == "miss")
+		    {
+		    	tableCell.style.backgroundColor = "white";
+		    }
+		    if(status == "sink")
+		    {
+		    	tableCell.style.backgroundColor = "black";
+		    }
+	}
+	function changeToGrey(tableCell) {
+		tableCell.style.backgroundColor = "grey";
 	}
 
-	function populateShips() {
-		
-		var xmlhttp;
+	function updateShips() {
 		xmlhttp = new XMLHttpRequest();
-		
 		xmlhttp.onreadystatechange = function() {
 			if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-				alert("test");
+				var status = JSON.parse(xmlhttp.responseText);
+				alert(status);
+				for(var i = 0; i < status.length; i++)
+				{
+					var x = status[i][0];
+					var y = status[i][1];
+					var result = status[i][2];
+					var loc = table.rows[y].cells[x];
+					tableText(loc, result);
+				}
+				
 			}
 		};
-		xmlhttp.open("POST", "getShips.php", true);
-		xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		
+		xmlhttp.open("POST", "updateShips.php", true);
+		xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		var cook = readCookie('username');
-		alert(cook);
 		xmlhttp.send(JSON.stringify(cook));
+	}
+
+	var xCoord;
+	var yCoord;
+	var ownerShips = [[xCoord, yCoord]];
+	var status;
+	var coord;
+	var key = 0;
+	
+	function populateShips() {
+			var n = "";
+			var xmlhttp;
+			var cook = readCookie('username');
+			xmlhttp = new XMLHttpRequest();
+			
+			xmlhttp.onreadystatechange = function() {
+				if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					coord = xmlhttp.responseText;
+					
+					
+					xCoord = coord[1];
+					yCoord = coord[3];
+					status = coord[5];
+					
+					for(var i = 8; i < coord.length-2; i++)
+					{
+						n+= coord[i];
+					}
+					
+
+					if(cook === n)
+					{
+						var table = document.getElementById("battleshipTable");
+						if (table != null) { 	
+					    	table.rows[yCoord].cells[xCoord].style.backgroundColor = "grey";
+						}
+					}
+					
+				}
+			};
+			xmlhttp.open("POST", "getShips.php", true);
+			xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			
+			
+			
+			var info = [cook, key];
+			xmlhttp.send(JSON.stringify(info));
+
+		key++;
+
+		
+
+		
 
 	}
 
-	function fire(x, y) {
+	function fire(both,x, y) {
 		var xmlhttp;
 		xmlhttp = new XMLHttpRequest();
 		xmlhttp.open("POST", "server.php", true);
-		xmlhttp.onreadystatechange = function() {
-			if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-				alert(JSON.parse(xmlhttp.responseText));
-			}
-		};
-
 		var cook = readCookie('username');
 		var x = x;
 		var y = y;
+		xmlhttp.onreadystatechange = function() {
+			if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				alert(JSON.parse(xmlhttp.responseText));
+				result = JSON.parse(xmlhttp.responseText);
+				tableText(both,result);
+
+			}
+		};
+
+		
 
 		var array = [x,y,cook];
 		xmlhttp.send(JSON.stringify(array))
@@ -283,9 +403,7 @@
 </script>
 </head>
 	<body>
-		<script>
-			
-		</script>
+		
 		<div class="gamescreen">
 		<div style="font-size: 50px; text-align: center;">
 			NAXJO Battleship
@@ -329,10 +447,11 @@
 						var score = getOtherScores(player);
 						document.write(score);
 					</script>
-					t
+					
 					<BR>
 					</BR>
 			</div>
+			<button type = "button" onclick = "updateShips()">Update Yo ship</button>
 			
 		</div>
 	</body>

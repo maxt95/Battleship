@@ -106,7 +106,23 @@
 		    var x = document.getElementById("battleshipTable").getElementsByTagName("td");
 		    tableCell.style.backgroundColor = "red";
 		    
-		}
+	}
+
+	function populateShips() {
+		
+		var xmlhttp;
+		xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("POST", "getShips.php", true);
+		xmlhttp.onreadystatechange = function() {
+			if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				alert("test");
+			}
+		};
+		alert("why?");
+		var cook = readCookie('username');
+		xmlhttp.send(JSON.stringify(cook));
+
+	}
 
 	function fire(x, y) {
 		var xmlhttp;
@@ -128,46 +144,43 @@
 	function getScores() {
 		var xmlhttp;
 		
-	    window.onload = function first() {
-	        xmlhttp = new XMLHttpRequest();
-	        xmlhttp.open("POST", "getScores.php", true);
-	        xmlhttp.onreadystatechange = function() {
-	            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-	                score = JSON.parse(xmlhttp.responseText);
-	                alert(score +" score");
-	                document.getElementById("userScore").innerHTML = score;
-	            }
-	            
-	        };
+	    
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("POST", "getScores.php", true);
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                score = JSON.parse(xmlhttp.responseText);
+                
+                document.getElementById("userScore").innerHTML = score;
+            }
+            
+        };
+        
+        var cook = readCookie('username');
+        
+        xmlhttp.send(JSON.stringify(cook));
 	        
-	        var cook = readCookie('username');
-	        alert(cook + "cookie username")
-	        xmlhttp.send(JSON.stringify(cook));
-	        
-	    };
+	    
 	    
 	 	
 	}
 	function getOtherScores(player) {
 		var xmlhttp;
 		var ply = player;
-	    window.onload = function first() {
-	        xmlhttp = new XMLHttpRequest();
-	        xmlhttp.open("POST", "getScores.php", true);
-	        xmlhttp.onreadystatechange = function() {
-	            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-	                score = JSON.parse(xmlhttp.responseText);
-	                
-	                document.getElementById("playerscores").innerHTML = score;
-	            }
-	            
-	        };
-	        
-	        alert(ply + "player");
-	        xmlhttp.send(JSON.stringify(ply));
-	        
-	    };
-	    
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("POST", "getScores.php", true);
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                score = JSON.parse(xmlhttp.responseText);
+                
+                document.getElementById("playerscores").innerHTML = score;
+            }
+            
+        };
+        
+        
+        xmlhttp.send(JSON.stringify(ply));
+	       
 	 	
 	}
 
@@ -202,7 +215,7 @@
 
 		xmlhttp = new XMLHttpRequest();
 		var cook = readCookie('username');
-		alert(cook);
+	
 		xmlhttp.onreadystatechange = function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 					var code = JSON.parse(xmlhttp.responseText);
@@ -210,7 +223,7 @@
                 	for (var key = 1; key < code.length;key++) {
                 		if(cook === code[key])
                 		{
-                			alert(code[key]);
+                			
                 		}
                 		else
                 		{
@@ -244,7 +257,9 @@
 </script>
 </head>
 	<body>
-		
+		<script>
+			populateShips();
+		</script>
 		<div class="gamescreen">
 		<div style="font-size: 50px; text-align: center;">
 			NAXJO Battleship

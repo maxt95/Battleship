@@ -5,6 +5,7 @@
     }
 
     $array = json_decode(file_get_contents("php://input"));
-    echo json_encode($array[0]);
+    $ship = $_SESSION['Ships'];
+    echo json_encode($ship);
 
 ?>

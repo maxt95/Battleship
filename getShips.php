@@ -9,8 +9,8 @@
     $coord = [];
     if($ship[3] === $name)
     {
-    	$coord = [$ship[0], $ship[1], $ship[2]]
+    	$coord = [$ship[0], $ship[1], $ship[2]];
     }
-    echo json_encode($coord);
+    echo json_encode($name);
 
 ?>

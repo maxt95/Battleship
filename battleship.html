@@ -85,7 +85,7 @@
 		    table.appendChild(tr);
 		}
 		document.body.appendChild(table);
-
+		populateShips();
 	}
 	function tableClick() {
 		var table = document.getElementById("battleshipTable");
@@ -135,14 +135,17 @@
 		
 		var xmlhttp;
 		xmlhttp = new XMLHttpRequest();
-		xmlhttp.open("POST", "getShips.php", true);
+		
 		xmlhttp.onreadystatechange = function() {
 			if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 				alert("test");
 			}
 		};
-		alert("why?");
+		xmlhttp.open("POST", "getShips.php", true);
+		xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		
 		var cook = readCookie('username');
+		alert(cook);
 		xmlhttp.send(JSON.stringify(cook));
 
 	}
@@ -281,7 +284,7 @@
 </head>
 	<body>
 		<script>
-			populateShips();
+			
 		</script>
 		<div class="gamescreen">
 		<div style="font-size: 50px; text-align: center;">

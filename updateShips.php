@@ -8,8 +8,9 @@
     $result = 1;
     $x;
     $y;
-    $finalArray[];
+    $finalArray;
     $count = 0;
+    $death = 0;
     for($i = 0; $i < sizeof($ships); $i++) #check ship array
     {
         $x = $ships[$i][0];
@@ -21,13 +22,16 @@
             $status = (int)$status;
             if($status === 0)
             {
+                $death++;
                 $result = "sink";
                 
                 $array[0] = $x;
                 $array[1] = $y;
                 $array[2] = $result;
+                $array[3] = $death;
                 $finalArray[$count] = $array;
                 $count++;
+
             }
             
         }

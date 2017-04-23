@@ -74,7 +74,9 @@
             xmlhttp.open("POST", "createKing.php", true);
             xmlhttp.send(name);
             eraseCookie("username");
+            eraseCookie("alive");
             createCookie("username",name,7);
+            createCookie("alive", "true",7);
 
             window.location = 'loading.html';
         }
@@ -117,7 +119,9 @@
                             xmlhttp.open("POST", "joinRoom.php", true);
                             xmlhttp.send(JSON.stringify(name));
                             eraseCookie("username");
+                            eraseCookie("alive");
                             createCookie("username",name,7);
+                            createCookie("alive", "true",7);
                             window.location = 'loading.html';
                        }
                     }

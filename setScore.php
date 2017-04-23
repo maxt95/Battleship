@@ -4,8 +4,14 @@
         session_start();
     }
     $name = json_decode(file_get_contents("php://input"));
-	$input = $_SESSION[$name];
-	$array = [$name, $input[2]];
-	echo json_encode($array);
     
+    
+    $input = $_SESSION[$name];
+
+   	$input[2] = $input[2] + 1;
+    
+	$_SESSION[$name] = $input;
+	echo json_encode($input[2]);
+    
+
 ?>

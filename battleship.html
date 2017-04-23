@@ -50,12 +50,26 @@
 	}
 </style>
 <script>
-
 	
+	window.onload = function first() {
+		var cook = readCookie("alive");
+		//alert(cook);
+		getScores();
+		getOtherPlayers();
+		if(cook=="true")
+		{
+
+			updateShip();
+			
+			
+		}
+		window.setInterval(first, 5000);
+	}
 
     var xmlhttp4;
 	var score = "";
 	var count = 0;
+	
 	function createTable() {
 		var table = document.createElement('table');
 		table.id = "battleshipTable";
@@ -96,21 +110,46 @@
 		
 		
 	}
+	var click = false;
+	function timer() {
+		setInterval(function(){ 
+			click = true;
+			
+		}, 3000);
+	}
 	function tableClick() {
-		var table = document.getElementById("battleshipTable");
-		if (table != null) {
-		    for (var i = 0; i < table.rows.length; i++) {
-		        for (var j = 0; j < table.rows[i].cells.length; j++)
-
-		        	table.rows[i].cells[j].onclick = function () {
-		            //tableText(this, i, j);
-		            alert('My position in table is: '+this.cellIndex+'x'+this.parentNode.rowIndex);
-		            fire(this,this.cellIndex, this.parentNode.rowIndex);
-		        };
-		    }
-		}
 
 		
+		
+		var table = document.getElementById("battleshipTable");
+		var cook = readCookie("alive");
+		if(cook=="true")
+		{
+			
+			if (table != null) {
+				
+					 for (var i = 0; i < table.rows.length; i++) {
+		        		for (var j = 0; j < table.rows[i].cells.length; j++) {
+
+		        				
+		        				table.rows[i].cells[j].onclick = function() {
+			    
+			    	        		fire(this,this.cellIndex, this.parentNode.rowIndex);
+			    	        	
+			        			};
+		        			
+		        			
+			        		
+		        		}
+		    		}
+				
+		    		
+			}
+			
+		}
+		
+		alert("end of click");
+		click = false;
 	}
 	function storeCount(num) {
 		count = num;
@@ -146,62 +185,81 @@
 		
 	}
     
-    function getNames() {               // Use this for a full array of all player names -- may help?
-        var players = getPlayerLimit();
-        var xmlhttp4 = new XMLHttpRequest();
-        xmlhttp4.onreadystatechange = function() {
-            if (xmlhttp4.readyState == 4 && xmlhttp4.status == 200) {
-                result = JSON.parse(xmlhttp4.responseText);
-            }
-        };
-        xmlhttp4.open("GET", "getInfo.php", false);
-        xmlhttp4.send();
-        var array = new Array(players);
-        var count = 0;
-        for (key in result) {
-            if (key != 0) {
-                array[count] = result[key];
-                count++;
-            }
-        }
-        return array;
-    }
     
 	function tableText(tableCell,status) {
 		    var x = document.getElementById("battleshipTable").getElementsByTagName("td");
 		    
-		    alert(status);
+		    //alert(status);
+		    var cook = readCookie("alive");
+		    if(cook =="true")
+		    {
+		    	if(status == "hit")
+		    	{	
+		    		if(tableCell.style.backgroundColor == "red")
+		    		{
 
-		    if(status == "hit")
-		    {
-		    	tableCell.style.backgroundColor = "red";
+		    		}
+		    		else
+		    		{
+		    			tableCell.style.backgroundColor = "red";
+		    			addScore();
+		    		}
+		    		
+		    	}
+		    	if(status == "miss")
+		    	{
+		    		if(tableCell.style.backgroundColor == "red")
+		    		{
+
+		    		}
+		    		else if(tableCell.style.backgroundColor == "black")
+		    		{
+
+		    		}
+		    		else if(tableCell.style.backgroundColor == "grey")
+		    		{
+
+		    		}
+		    		else
+		    		{
+		    			tableCell.style.backgroundColor = "white";
+		    		}
+		    		
+		    	}
 		    }
-		    if(status == "miss")
-		    {
-		    	tableCell.style.backgroundColor = "white";
-		    }
+		    
 		    if(status == "sink")
 		    {
+		    	if(tableCell.style.backgroundColor == "black")
+		    	{
+
+		    	}
 		    	tableCell.style.backgroundColor = "black";
 		    }
 	}
-	function changeToGrey(tableCell) {
-		tableCell.style.backgroundColor = "grey";
-	}
 
-	function updateShips() {
+	function updateShip() {
+		var cook = readCookie("alive");
+		
+		var table = document.getElementById("battleshipTable");
 		xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function() {
 			if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 				var status = JSON.parse(xmlhttp.responseText);
-				alert(status);
+				
 				for(var i = 0; i < status.length; i++)
 				{
 					var x = status[i][0];
 					var y = status[i][1];
 					var result = status[i][2];
+					var death = status[i][3];
 					var loc = table.rows[y].cells[x];
 					tableText(loc, result);
+					if(death == 4)
+					{
+						createCookie("alive", "false", 7);
+						alert("You are dead.");
+					}
 				}
 				
 			}
@@ -269,23 +327,47 @@
 	function fire(both,x, y) {
 		var xmlhttp;
 		xmlhttp = new XMLHttpRequest();
-		xmlhttp.open("POST", "server.php", true);
+		
 		var cook = readCookie('username');
+		var aliveCook = readCookie('alive');
 		var x = x;
 		var y = y;
 		xmlhttp.onreadystatechange = function() {
 			if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-				alert(JSON.parse(xmlhttp.responseText));
+				//alert(JSON.parse(xmlhttp.responseText));
 				result = JSON.parse(xmlhttp.responseText);
-				tableText(both,result);
+				if(aliveCook == "true")
+				{	
+					
+  						tableText(both,result);
+					
+					
+				}
+				
 
 			}
 		};
 
+		if(aliveCook == "true")
+		{
+			xmlhttp.open("POST", "server.php", true);
+			var array = [x,y,cook];
+			xmlhttp.send(JSON.stringify(array));
+		}
 		
+	}
 
-		var array = [x,y,cook];
-		xmlhttp.send(JSON.stringify(array))
+	function addScore() {
+		var xmlhttp = new XMLHttpRequest();
+		var cook = readCookie("username");
+		xmlhttp.open("POST", "setScore.php", true);
+		xmlhttp.onreadystatechange = function() {
+			if(xmlhttp.readyState == 4 && xmlhttp.status == 200)
+			{
+				//alert(JSON.parse(xmlhttp.responseText));
+			}
+		};	
+		xmlhttp.send(JSON.stringify(cook));
 	}
 	function getScores() {
 		var xmlhttp;
@@ -296,7 +378,7 @@
         xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                 score = JSON.parse(xmlhttp.responseText);
-                
+               // alert(score);
                 document.getElementById("userScore").innerHTML = score;
             }
             
@@ -310,25 +392,7 @@
 	    
 	 	
 	}
-	function getOtherScores(player) {
-		var xmlhttp;
-		var ply = player;
-        xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("POST", "getScores.php", true);
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                score = JSON.parse(xmlhttp.responseText);
-                
-                document.getElementById("playerscores").innerHTML = score;
-            }
-            
-        };
-        
-        
-        xmlhttp.send(JSON.stringify(ply));
-	       
-	 	
-	}
+	
 
 	function getPlayers() {
 		var player;
@@ -354,18 +418,65 @@
 		xmlhttp.send();
 		
 	}
+	var nameScores = [];
+	var c = 0;
+	function returnArray(array) {
+		
+		//alert(count/4);
+		if(c > count/4)
+		{
+			c=0;
+		}
+		nameScores[c] = array;
+		c++;
+		//alert(nameScores.length);
+		var txt = "";
+		document.getElementById("playernames").innerText = "";
+		for(var i = 0; i< (count/4)-1; i++)
+		{
+			tmp = nameScores[i];
+			txt= txt + tmp[0][0] + ": " + tmp[0][1] + "\n";
+		}
+        document.getElementById("playernames").innerText = txt;
+	}
+	function getOtherScores(player) {
+		var xmlhttp;
+		var score;
+		var cook = readCookie("username");
+		var array=[];
+		var count = 0;
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("POST", "player.php", true);
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                var score = JSON.parse(xmlhttp.responseText);
+                array[count] = score;
+                count++;
+                returnArray(array);
+                	      	
+            }
+                
+            
+            
+        };
+        
 
-	function getOtherPlayers(player) {
+        xmlhttp.send(JSON.stringify(player));
+	       
+	 	
+	}
+
+	function getOtherPlayers() {
 		var player;
 		var xmlhttp;
 
 		xmlhttp = new XMLHttpRequest();
 		var cook = readCookie('username');
-	
+		var array = [];
 		xmlhttp.onreadystatechange = function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 					var code = JSON.parse(xmlhttp.responseText);
-                	var txt = "";
+                	var count = 0;
                 	for (var key = 1; key < code.length;key++) {
                 		if(cook === code[key])
                 		{
@@ -373,21 +484,31 @@
                 		}
                 		else
                 		{
-                			txt += code[key].concat(":<br></br>");
-	                    	if (key === 0) {
-	                        	
-	                    	}
+                			getOtherScores(code[key]);		
+                			//array[count] = code[key];
+	                    	//count++;
                 		}
                     	
                 	}
 	          
-	                document.getElementById("playernames").innerHTML = txt;
+	                //document.getElementById("playernames").innerHTML = txt;
 	            }
+	            
 		};
+
 		xmlhttp.open("GET", "getInfo.php", true);
 		xmlhttp.send();
 		
 	}
+	function createCookie(name,value,days) {
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime()+(days*24*60*60*1000));
+            var expires = "; expires="+date.toGMTString();
+        }
+        else var expires = "";
+        document.cookie = name+"="+value+expires+"; path=/";
+    }
 
 	function readCookie(name) {
 		var nameEQ = name + "=";
@@ -428,30 +549,25 @@
 		<div class="center-panel">
 			<script>
 				createTable();
-				tableClick();
+				var cook = readCookie("alive");
+				
+				if(cook == "true")
+				{
+					tableClick();
+					
+				}
+				
 			</script>
 		</div>
 		<div class="right-panel">
-			<div id="playernames" style="display:block;">
-				<script>
-					var player = getOtherPlayers();
-					document.write(player);
-					
-				</script>
-
+			<div id="playernames" style="display:inline;">
+				SCORES:
 				
 			</div>
-			<div id="playerscores" style="display:block;">
-					<script>
-						var player = getOtherPlayers();
-						var score = getOtherScores(player);
-						document.write(score);
-					</script>
+			<div id="playerscores" style="display:inline;">
 					
-					<BR>
-					</BR>
 			</div>
-			<button type = "button" onclick = "updateShips()">Update Yo ship</button>
+			
 			
 		</div>
 	</body>

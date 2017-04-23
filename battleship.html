@@ -51,7 +51,14 @@
 </style>
 <script>
 	
-	
+	window.onload = function() {
+    	var htmlElements = "";
+		for (var i = 0; i < count/4; i++) {
+		   htmlElements += '<div id="playernames"'+i+'></div>';
+		}
+			var container = document.getElementById("playernames");
+			container.innerHTML = htmlElements;
+			}
 
     var xmlhttp4;
 	var score = "";
@@ -441,7 +448,9 @@
 			
 			tmp = nameScores[i];
 			txt= txt + tmp[0][0] + ": " + tmp[0][1] + "\n";
+
 			document.getElementById("playernames"+i).innerText = txt;
+			alert(txt);
 		}
         //document.getElementById("playernames").innerText = txt;
 	}
@@ -564,15 +573,7 @@
 			<div id="playernames">
 			</div>
 			<script>
-				var toAdd = document.createDocumentFragment();
-				for(var i=0; i < count/4; i++){
-				   var newDiv = document.createElement('div');
-				   newDiv.id = 'playernames'+i;
-				   newDiv.className = '';
-				   toAdd.appendChild(newDiv);
-				}
-
-				document.appendChild(toAdd);
+				
 			</script>
 			
 			<div id="playerscores" style="display:inline;">

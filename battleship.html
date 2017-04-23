@@ -54,11 +54,14 @@
 	window.onload = function first() {
 		var cook = readCookie("alive");
 		//alert(cook);
+		getScores();
+		getOtherPlayers();
 		if(cook=="true")
 		{
+
 			updateShip();
-			getScores();
-			getOtherPlayers();
+			
+			
 		}
 		window.setInterval(first, 5000);
 	}
@@ -107,27 +110,55 @@
 		
 		
 	}
+	var click = false;
+	function timer() {
+		setInterval(function(){ 
+			click = true;
+			
+		}, 3000);
+	}
 	function tableClick() {
+
+		
+		timer();
 		var table = document.getElementById("battleshipTable");
 		var cook = readCookie("alive");
 		if(cook=="true")
 		{
+			
 			if (table != null) {
-		    for (var i = 0; i < table.rows.length; i++) {
-		        for (var j = 0; j < table.rows[i].cells.length; j++)
+				
+					 for (var i = 0; i < table.rows.length; i++) {
+		        		for (var j = 0; j < table.rows[i].cells.length; j++) {
 
-		        	table.rows[i].cells[j].onclick = function () {
-		            //tableText(this, i, j);
-		            //alert('My position in table is: '+this.cellIndex+'x'+this.parentNode.rowIndex);
 
-		            fire(this,this.cellIndex, this.parentNode.rowIndex);
-		        };
-		    }
-		}
+		        			if(click)
+		        			{
+		        				alert(click);
+		        				table.rows[i].cells[j].onclick = function() {
+			    
+			            		//alert('My position in table is: '+this.cellIndex+'x'+this.parentNode.rowIndex);
+
+
+			    	        	fire(this,this.cellIndex, this.parentNode.rowIndex);
+			    	        	click = false;
+			        			};
+		        			}
+		        			else
+		        			{
+
+		        			}
+			        		
+		        		}
+		    		}
+				
+		    		
+			}
+			
 		}
 		
-
-		
+		alert("end of click");
+		click = false;
 	}
 	function storeCount(num) {
 		count = num;
@@ -163,26 +194,6 @@
 		
 	}
     
-    function getNames() {               // Use this for a full array of all player names -- may help?
-        var players = getPlayerLimit();
-        var xmlhttp4 = new XMLHttpRequest();
-        xmlhttp4.onreadystatechange = function() {
-            if (xmlhttp4.readyState == 4 && xmlhttp4.status == 200) {
-                result = JSON.parse(xmlhttp4.responseText);
-            }
-        };
-        xmlhttp4.open("GET", "getInfo.php", false);
-        xmlhttp4.send();
-        var array = new Array(players);
-        var count = 0;
-        for (key in result) {
-            if (key != 0) {
-                array[count] = result[key];
-                count++;
-            }
-        }
-        return array;
-    }
     
 	function tableText(tableCell,status) {
 		    var x = document.getElementById("battleshipTable").getElementsByTagName("td");
@@ -234,9 +245,6 @@
 		    	}
 		    	tableCell.style.backgroundColor = "black";
 		    }
-	}
-	function changeToGrey(tableCell) {
-		tableCell.style.backgroundColor = "grey";
 	}
 
 	function updateShip() {
@@ -338,8 +346,11 @@
 				//alert(JSON.parse(xmlhttp.responseText));
 				result = JSON.parse(xmlhttp.responseText);
 				if(aliveCook == "true")
-				{
-					tableText(both,result);
+				{	
+					
+  						tableText(both,result);
+					
+					
 				}
 				
 
@@ -418,18 +429,19 @@
 	}
 	var nameScores = [];
 	var c = 0;
-	function returnArray(array,count) {
+	function returnArray(array) {
 		
-		if(c > count)
+		//alert(count/4);
+		if(c > count/4)
 		{
 			c=0;
 		}
 		nameScores[c] = array;
 		c++;
-		//alert(nameScores);
+		//alert(nameScores.length);
 		var txt = "";
 		document.getElementById("playernames").innerText = "";
-		for(var i = 0; i< nameScores.length; i++)
+		for(var i = 0; i< (count/4)-1; i++)
 		{
 			tmp = nameScores[i];
 			txt= txt + tmp[0][0] + ": " + tmp[0][1] + "\n";
@@ -449,7 +461,7 @@
                 var score = JSON.parse(xmlhttp.responseText);
                 array[count] = score;
                 count++;
-                returnArray(array,count);
+                returnArray(array);
                 	      	
             }
                 
@@ -547,9 +559,11 @@
 			<script>
 				createTable();
 				var cook = readCookie("alive");
+				
 				if(cook == "true")
 				{
 					tableClick();
+					
 				}
 				
 			</script>

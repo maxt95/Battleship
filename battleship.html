@@ -120,7 +120,7 @@
 	function tableClick() {
 
 		
-		timer();
+		
 		var table = document.getElementById("battleshipTable");
 		var cook = readCookie("alive");
 		if(cook=="true")
@@ -131,23 +131,14 @@
 					 for (var i = 0; i < table.rows.length; i++) {
 		        		for (var j = 0; j < table.rows[i].cells.length; j++) {
 
-
-		        			if(click)
-		        			{
-		        				alert(click);
+		        				
 		        				table.rows[i].cells[j].onclick = function() {
 			    
-			            		//alert('My position in table is: '+this.cellIndex+'x'+this.parentNode.rowIndex);
-
-
-			    	        	fire(this,this.cellIndex, this.parentNode.rowIndex);
-			    	        	click = false;
+			    	        		fire(this,this.cellIndex, this.parentNode.rowIndex);
+			    	        	
 			        			};
-		        			}
-		        			else
-		        			{
-
-		        			}
+		        			
+		        			
 			        		
 		        		}
 		    		}

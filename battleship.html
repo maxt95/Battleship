@@ -51,20 +51,7 @@
 </style>
 <script>
 	
-	window.onload = function first() {
-		var cook = readCookie("alive");
-		//alert(cook);
-		getScores();
-		getOtherPlayers();
-		if(cook=="true")
-		{
-
-			updateShip();
-			
-			
-		}
-		window.setInterval(first, 5000);
-	}
+	
 
     var xmlhttp4;
 	var score = "";
@@ -110,46 +97,53 @@
 		
 		
 	}
-	var click = false;
+	var alfred = true;
+
 	function timer() {
-		setInterval(function(){ 
-			click = true;
-			
-		}, 3000);
+		alfred = true;
+		
+		
 	}
 	function tableClick() {
 
 		
 		
-		var table = document.getElementById("battleshipTable");
-		var cook = readCookie("alive");
-		if(cook=="true")
-		{
-			
-			if (table != null) {
+			var table = document.getElementById("battleshipTable");
+			var cook = readCookie("alive");
+			if(cook=="true")
+			{
 				
-					 for (var i = 0; i < table.rows.length; i++) {
-		        		for (var j = 0; j < table.rows[i].cells.length; j++) {
+				if (table != null) {
+					
+						 for (var i = 0; i < table.rows.length; i++) {
+			        		for (var j = 0; j < table.rows[i].cells.length; j++) {
 
-		        				
-		        				table.rows[i].cells[j].onclick = function() {
-			    
-			    	        		fire(this,this.cellIndex, this.parentNode.rowIndex);
-			    	        	
-			        			};
-		        			
-		        			
-			        		
-		        		}
-		    		}
+			        				
+			        				
+			        					table.rows[i].cells[j].onclick = function() {
+			        						
+			        						
+				    						
+				    	        			fire(this,this.cellIndex, this.parentNode.rowIndex);
+				    	        			alfred = false;
+				        				};
+			        				
+			        				
+			        			
+			        			
+				        		
+			        		}
+			    		}
+					
+			    		
+				}
 				
-		    		
 			}
-			
-		}
 		
-		alert("end of click");
-		click = false;
+		
+		
+		
+		
 	}
 	function storeCount(num) {
 		count = num;
@@ -339,7 +333,7 @@
 				if(aliveCook == "true")
 				{	
 					
-  						tableText(both,result);
+  					tableText(both,result);
 					
 					
 				}
@@ -350,9 +344,19 @@
 
 		if(aliveCook == "true")
 		{
-			xmlhttp.open("POST", "server.php", true);
-			var array = [x,y,cook];
-			xmlhttp.send(JSON.stringify(array));
+			if(alfred)
+			{
+				//alert("sent");	
+				xmlhttp.open("POST", "server.php", true);
+				var array = [x,y,cook];
+				xmlhttp.send(JSON.stringify(array));
+				alfred = false;
+			}
+			else
+			{
+				//alert("did not send");
+			}
+			
 		}
 		
 	}
@@ -431,13 +435,15 @@
 		c++;
 		//alert(nameScores.length);
 		var txt = "";
-		document.getElementById("playernames").innerText = "";
-		for(var i = 0; i< (count/4)-1; i++)
+		
+		for(var i = 0; i< (count/4); i++)
 		{
+			document.getElementById("playernames"+i).innerText = "";
 			tmp = nameScores[i];
 			txt= txt + tmp[0][0] + ": " + tmp[0][1] + "\n";
+			document.getElementById("playernames"+i).innerHTML = txt;
 		}
-        document.getElementById("playernames").innerText = txt;
+        //document.getElementById("playernames").innerText = txt;
 	}
 	function getOtherScores(player) {
 		var xmlhttp;
@@ -528,6 +534,8 @@
 		<div class="gamescreen">
 		<div style="font-size: 50px; text-align: center;">
 			NAXJO Battleship
+			<br></br>
+			<a href="login.html">home</a>
 		</div>
 		<div class="left-panel" style="text-align: center;">
 
@@ -551,19 +559,47 @@
 				createTable();
 				var cook = readCookie("alive");
 				
-				if(cook == "true")
+				
+				window.setInterval(function(){
+						
+					
+					//alert(cook);
+					getScores();
+					getOtherPlayers();
+					if(cook=="true")
+					{
+						updateShip();	
+						timer();
+					}
+					
+				}, 3000);
+				if(cook=="true")
 				{
 					tableClick();
-					
 				}
+				
+					
+				
 				
 			</script>
 		</div>
 		<div class="right-panel">
-			<div id="playernames" style="display:inline;">
+			<div id="playernamesScore" style="display:inline;">
 				SCORES:
 				
 			</div>
+			<script>
+				var toAdd = document.createDocumentFragment();
+				for(var i=0; i < count/4; i++){
+				   var newDiv = document.createElement('div');
+				   newDiv.id = 'playernames'+i;
+				   newDiv.className = '';
+				   toAdd.appendChild(newDiv);
+				}
+
+				document.appendChild(toAdd);
+			</script>
+			
 			<div id="playerscores" style="display:inline;">
 					
 			</div>

@@ -233,19 +233,25 @@
 	}
 	var endgame = false;
 	var finals = [];
-	function finals(s)
+	function finals1(s)
 	{
 		finals.push(s);
 		finals += "\n" + s;
-		alert(finals);
+		alert(players.length + " : " + count/4);
 
-		if(players.length === finals.length)
+		if(players.length === count/4)
 		{
-			let arr = Object.values(playerScores);
-			let min = Math.min(...arr);
-			let max = Math.max(...arr);
-
-			alert( 'Min value: ' + min + ', max value: ' + max );
+			alert("inside if");
+			var lowest = Number.POSITIVE_INFINITY;
+			var highest = Number.NEGATIVE_INFINITY;
+			var tmp;
+			for (var i=nameScores.length-1; i>=0; i--) {
+			    tmp = nameScores[i].score;
+			    alert(tmp);
+			    if (tmp < lowest) lowest = tmp;
+			    if (tmp > highest) highest = tmp;
+			}
+			alert(highest, lowest);
 		}
 	}
 	function finalScores() {
@@ -254,7 +260,7 @@
 		xmlhttp.onreadystatechange = function() {
 			var result = JSON.parse(xmlhttp.responseText);
 			alert(result);
-			finals(result);
+			finals1(result);
 			
 		};
 		xmlhttp.open("POST", "player.php", true);
@@ -528,7 +534,7 @@
         //document.getElementById("playernames").innerText = txt;
 	}
 	function populateArray(array,n,s) {
-		alert(array);
+		//alert(array);
 		for (var i = 0; i < array.length; i++) {
 						//alert(nameScores[0].name);
 					    if (array[i].name === n) {

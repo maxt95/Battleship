@@ -238,20 +238,27 @@
 		//finals.push(s);
 		//finals += "\n" + s;
 		//alert(players.length + " : " + count/4);
-
+		var cook = readCookie('username');
 		if(players.length === count/4)
 		{
-			
+			nameScores.push({username: cook, score: score}); 
 			var lowest = Number.POSITIVE_INFINITY;
 			var highest = Number.NEGATIVE_INFINITY;
 			var tmp;
 			for (var i=nameScores.length-1; i>=0; i--) {
 			    tmp = nameScores[i].score;
-			    alert(nameScores[i]);
+			    //alert(JSON.stringify(nameScores[i]));
 			    if (tmp < lowest) lowest = tmp;
 			    if (tmp > highest) highest = tmp;
 			}
-			alert(highest, lowest);
+			//alert("winner " + highest, lowest);
+			var winners = "";
+			for (var i=0; i < nameScores.length; i++) {
+		        if (nameScores[i].score === highest) {
+		            winners += "winner(s) " + JSON.stringify(nameScores[i].username);
+		        }
+    		}
+    		alert(winners);
 		}
 	}
 	function finalScores() {
@@ -259,16 +266,17 @@
 		xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function() {
 			var result = JSON.parse(xmlhttp.responseText);
-			alert(result);
+			//alert(result);
 			finals1(result);
 			
 		};
-		xmlhttp.open("POST", "player.php", true);
-		xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		
 		var cook = readCookie('username');
 		players.push(cook);
 		for(var i =0; i < players.length; i++)
 		{
+			xmlhttp.open("POST", "player.php", true);
+			xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xmlhttp.send(JSON.stringify(players[i]));
 		}
 		
@@ -539,7 +547,7 @@
 		//alert(array);
 		for (var i = 0; i < array.length; i++) {
 						//alert(nameScores[0].name);
-					    if (array[i].name === n) {
+					    if (array[i].username === n) {
 					        array[i].score = s;
 					    }
 					}

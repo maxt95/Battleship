@@ -233,13 +233,16 @@
 	}
 	var endgame = false;
 	var finals = [];
+	var sleepy = 0;
 	function finals1(s)
 	{
+		//alert("final");
 		//finals.push(s);
 		//finals += "\n" + s;
 		//alert(players.length + " : " + count/4);
 		var cook = readCookie('username');
-		if(players.length === count/4)
+
+		if(players.length+1 === count/4)
 		{
 			//alert(score);
 			//nameScores.push({username: cook, score: score}); 
@@ -271,11 +274,21 @@
 		            
 		        }
     		}
-    		alert(winners);
+    		if(sleepy === 0)
+    		{
+    			alert(winners);
+    			sleepy++;
+    		}
+    		else
+    		{
+    			
+    		}
+    		
 		}
 	}
 
 	function finalScores() {
+		//alert("finalScores");
 		endgame = true;
 		xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function() {
@@ -285,12 +298,12 @@
 			
 		};
 		
-		var cook = readCookie('username');
-		players.push(cook);
+		
+		xmlhttp.open("POST", "player.php", true);
+		xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		for(var i =0; i < players.length; i++)
 		{
-			xmlhttp.open("POST", "player.php", true);
-			xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			
 			xmlhttp.send(JSON.stringify(players[i]));
 		}
 		
@@ -298,11 +311,13 @@
 	var youOut = false;
 	function subtractPlayers() {
 		youOut = true;
-		//lives--;
+		lives--;
         //alert("Lives: " + lives);
         setSessionPlayers();
+        //alert("lives " + lives);
 		if(lives === 1)
 		{
+
 			createCookie("alive", "false", 7);
 			finalScores();
 		}
@@ -327,6 +342,11 @@
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                 var result = JSON.parse(xmlhttp.responseText);
                 Update(result);
+                if(result === 1)
+                {
+                	createCookie("alive", false, 7);
+                	finalScores();
+                }
             }
         };
         xmlhttp.open("GET","getLives.php",true);
@@ -702,8 +722,7 @@
 		<div class="gamescreen">
 		<div style="font-size: 50px; text-align: center;">
 			NAXJO Battleship
-			<br></br>
-			<a href="login.html">home</a>
+			
 		</div>
 		<div class="left-panel" style="text-align: center;">
 
@@ -745,7 +764,8 @@
 		<script>
 			var cook = readCookie("alive");
 				
-				
+				if(!endgame)
+				{
 					window.setInterval(function(){
 						//alert("lives remaining: " + " " + lives);
 						
@@ -754,10 +774,17 @@
 						getOtherPlayers();
 	                    updateLives();
 	                    //alert(lives);
+
+
 	                    if(lives === 1) 
 	                    {
-	                    	createCookie("alive", "false", 7);
-	                        finalScores();
+	                    	//createCookie("alive", "false", 7);
+	                    	if(!endgame)
+	                    	{
+	                    		//finalScores();
+	                    		//window.location.reload(false); 
+	                    	}
+	                        
 	                        
 	                    }
 						if(cook=="true")
@@ -775,6 +802,7 @@
                     	}
                         
                     }
+            }
 				
 				
 		</script>

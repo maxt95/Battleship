@@ -10,6 +10,8 @@
     $_SESSION['Info'] = $array;
     $numPlayers = $_SESSION['NumPlayers'];
     $_SESSION['NumPlayers'] = $numPlayers + 1;
+    $lives = $_SESSION['Lives'];
+    $_SESSION['Lives'] = $lives + 1;
 
     
     echo json_encode($_SESSION[$name]);

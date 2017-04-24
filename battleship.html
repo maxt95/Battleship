@@ -260,12 +260,37 @@
 	var youOut = false;
 	function subtractPlayers() {
 		youOut = true;
-		lives--;
+		//lives--;
+        //alert("Lives: " + lives);
+        setSessionPlayers();
 		if(lives === 1)
 		{
 			finalScores();
 		}
 	}
+    
+    function setSessionPlayers() {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            
+        };
+        xmlhttp.open("POST","subtractPlayers.php",true);
+        xmlhttp.send();
+    }
+    
+    function Update(lvs) {
+        lives = lvs;
+    }
+    
+    function updateLives() {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            var result = JSON.parse(xmlhttp.responseText);
+            Update(result);
+        };
+        xmlhttp.open("GET","getLives.php",true);
+        xmlhttp.send();
+    }
 
 	function updateShip() {
 		var cook = readCookie("alive");
@@ -486,7 +511,7 @@
 			
 			txt = name + ": " + score + "\n";
 			//alert(txt);
-			document.getElementById("playernames"+i).innerText = txt;
+			document.getElementById("playernames"+i).innerHTML = txt;
 			//alert(txt);
 		}
 		
@@ -668,6 +693,11 @@
 					//alert(cook);
 					getScores();
 					getOtherPlayers();
+                    updateLives();
+                    //alert(lives);
+                    if(lives === 1) {
+                        finalScores();
+                    }
 					if(cook=="true")
 					{
 						updateShip();	
@@ -676,9 +706,9 @@
 					
 				}, 3000);
 				if(cook=="true")
-				{
-					tableClick();
-				}
+                    {
+                        tableClick();
+                    }
 				}
 				
 		</script>

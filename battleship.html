@@ -267,7 +267,7 @@
 		xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function() {
 			var result = JSON.parse(xmlhttp.responseText);
-			alert(result);
+			alert("lives left: "+result);
 			if(result = 1)
 			{
 				alert("Game Over");

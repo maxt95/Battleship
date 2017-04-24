@@ -13,6 +13,5 @@
     $array = array();
     $array[0] = $roomCode;
     $_SESSION['Info'] = $array;
-    $_SESSION['EndGame'] = false;
     echo $roomCode;
 ?>

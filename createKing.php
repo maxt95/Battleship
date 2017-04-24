@@ -11,6 +11,7 @@
     $_SESSION['Info'] = $array;
     $_SESSION['Launch'] = false;
     $_SESSION['InGame'] = false;
+    $_SESSION['Lives'] = 1;
 
     echo $_SESSION['Info'];
 ?>

@@ -50,15 +50,8 @@
 	}
 </style>
 <script>
-	
-	window.onload = function() {
-    	var htmlElements = "";
-		for (var i = 0; i < count/4; i++) {
-		   htmlElements += '<div id="playernames"'+i+'></div>';
-		}
-			var container = document.getElementById("playernames");
-			container.innerHTML = htmlElements;
-			}
+	var nameScores = [];
+
 
     var xmlhttp4;
 	var score = "";
@@ -239,9 +232,56 @@
 		    }
 	}
 
+	function finalScores() {
+		xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function() {
+			var result = JSON.parse(xmlhttp.responseText);
+			alert("final score " + result);
+		};
+		xmlhttp.open("POST", "player.php", true);
+		xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		
+		for(var i =0; i < players.length; i++)
+		{
+			xmlhttp.send(JSON.stringify(players[i]));
+		}
+		
+	}
+	function subtractPlayers() {
+		xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function() {
+			var result = JSON.parse(xmlhttp.responseText);
+			if(result = 1)
+			{
+				alert("Game Over");
+				finalScores();
+			}
+		};
+		xmlhttp.open("GET", "subtractPlayers.php", true);
+		xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		
+		xmlhttp.send();
+	}
+
+	function getLives() {
+		xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function() {
+			var result = JSON.parse(xmlhttp.responseText);
+			alert(result);
+			if(result = 1)
+			{
+				alert("Game Over");
+				finalScores();
+			}
+		};
+		xmlhttp.open("GET", "getLives.php", true);
+		xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		
+		xmlhttp.send();
+	}
 	function updateShip() {
 		var cook = readCookie("alive");
-		
+		getLives();
 		var table = document.getElementById("battleshipTable");
 		xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function() {
@@ -258,8 +298,10 @@
 					tableText(loc, result);
 					if(death == 4)
 					{
+
 						createCookie("alive", "false", 7);
 						alert("You are dead.");
+						subtractPlayers();
 					}
 				}
 				
@@ -429,29 +471,34 @@
 		xmlhttp.send();
 		
 	}
-	var nameScores = [];
+
+	var players = [];
+	function checkArray(array, name)
+	{
+		return array.some(function(arrVal)
+		{
+			return name === arrVal[0];
+		});
+	}
 	var c = 0;
 	function returnArray(array) {
-		
-		//alert(count/4);
-		if(c > count/4)
-		{
-			c=0;
-		}
-		nameScores[c] = array;
-		c++;
-		//alert(nameScores.length);
+		//alert("returnArray");
 		var txt = "";
-		
+		var obj = array;
 		for(var i = 0; i< (count/4); i++)
-		{
+		{	
+			//alert(obj);
+			//document.getElementById("playernames"+i).innerText = "";
+			var name = obj.map(function(a) {return a.username;});
+			var score = obj.map(function(b) {return b.score;});
+			//alert(result+": " +score);
 			
-			tmp = nameScores[i];
-			txt= txt + tmp[0][0] + ": " + tmp[0][1] + "\n";
-
+			txt = name + ": " + score + "\n";
+			//alert(txt);
 			document.getElementById("playernames"+i).innerText = txt;
-			alert(txt);
+			//alert(txt);
 		}
+		
         //document.getElementById("playernames").innerText = txt;
 	}
 	function getOtherScores(player) {
@@ -464,10 +511,31 @@
         xmlhttp.open("POST", "player.php", true);
         xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                var score = JSON.parse(xmlhttp.responseText);
-                array[count] = score;
-                count++;
-                returnArray(array);
+                var result = JSON.parse(xmlhttp.responseText);
+                array[0] = result[0];
+                array[1] = result[1];
+                //var o = {name: nameScores[0], score: nameScores[1]};
+
+                var n = array[0];
+				var s = array[1];
+				var found = nameScores.some(function (el) {
+	    			return el.username === n;
+	  			});
+		   	    if (!found) { 
+		   	    	nameScores.push({username: n, score: s}); 
+		   	    	players.push(n);
+		   	    }
+		   	    else
+		   	    {
+		   	    	var index = nameScores.indexOf(n);
+		   	    	//nameScores[index] = {name: n, score: s};
+		   	    }
+		   	    //alert(JSON.stringify(nameScores));
+
+		   	    
+		
+				
+                returnArray(nameScores);
                 	      	
             }
                 
@@ -480,7 +548,7 @@
 	       
 	 	
 	}
-
+	
 	function getOtherPlayers() {
 		var player;
 		var xmlhttp;
@@ -499,7 +567,8 @@
                 		}
                 		else
                 		{
-                			getOtherScores(code[key]);		
+                			getOtherScores(code[key]);	
+
                 			//array[count] = code[key];
 	                    	//count++;
                 		}
@@ -536,10 +605,24 @@
 	return null;
 }
 
+	function createDivs() {
+		var htmlElements = "";
+		for (var i = 0; i < count/4; i++) {
+		   htmlElements += '<div id="playernames'+i+'"></div>';
+		}
+		var container = document.getElementById("playernames");
+		container.innerHTML = htmlElements;
+	}
+
 </script>
 </head>
-	<body>
-		
+	<body onload="createDivs()">
+		<script>
+
+			
+
+		</script>
+
 		<div class="gamescreen">
 		<div style="font-size: 50px; text-align: center;">
 			NAXJO Battleship
@@ -571,6 +654,7 @@
 		</div>
 		<div class="right-panel">
 			<div id="playernames">
+			Scores:
 			</div>
 			<script>
 				

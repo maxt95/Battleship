@@ -56,7 +56,7 @@
     var xmlhttp4;
 	var score = "";
 	var count = 0;
-	
+	var lives = 0;
 	function createTable() {
 		var table = document.createElement('table');
 		table.id = "battleshipTable";
@@ -147,7 +147,7 @@
 	}
 	function storeCount(num) {
 		count = num;
-		
+		lives = count;
 		count = count*4;
 		for(var j = 0; j < count; j++)
 		{
@@ -231,8 +231,9 @@
 		    	tableCell.style.backgroundColor = "black";
 		    }
 	}
-
+	var endgame = false;
 	function finalScores() {
+		endgame = true;
 		xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function() {
 			var result = JSON.parse(xmlhttp.responseText);
@@ -248,40 +249,16 @@
 		
 	}
 	function subtractPlayers() {
-		xmlhttp = new XMLHttpRequest();
-		xmlhttp.onreadystatechange = function() {
-			var result = JSON.parse(xmlhttp.responseText);
-			if(result = 1)
-			{
-				alert("Game Over");
-				finalScores();
-			}
-		};
-		xmlhttp.open("GET", "subtractPlayers.php", true);
-		xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		
-		xmlhttp.send();
+		lives--;
+		if(lives === 1)
+		{
+			finalScores();
+		}
 	}
 
-	function getLives() {
-		xmlhttp = new XMLHttpRequest();
-		xmlhttp.onreadystatechange = function() {
-			var result = JSON.parse(xmlhttp.responseText);
-			alert("lives left: "+result);
-			if(result = 1)
-			{
-				alert("Game Over");
-				finalScores();
-			}
-		};
-		xmlhttp.open("GET", "getLives.php", true);
-		xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		
-		xmlhttp.send();
-	}
 	function updateShip() {
 		var cook = readCookie("alive");
-		getLives();
+		
 		var table = document.getElementById("battleshipTable");
 		xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function() {
@@ -669,8 +646,9 @@
 		<script>
 			var cook = readCookie("alive");
 				
-				
-				window.setInterval(function(){
+				if(!endgame)
+				{
+					window.setInterval(function(){
 						
 					
 					//alert(cook);
@@ -687,6 +665,8 @@
 				{
 					tableClick();
 				}
+				}
+				
 		</script>
 	</body>
 	<footer style="background-color: grey;">

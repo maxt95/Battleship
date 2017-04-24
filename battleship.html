@@ -238,6 +238,15 @@
 		finals.push(s);
 		finals += "\n" + s;
 		alert(finals);
+
+		if(players.length === finals.length)
+		{
+			let arr = Object.values(playerScores);
+			let min = Math.min(...arr);
+			let max = Math.max(...arr);
+
+			alert( 'Min value: ' + min + ', max value: ' + max );
+		}
 	}
 	function finalScores() {
 		endgame = true;

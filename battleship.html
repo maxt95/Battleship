@@ -476,7 +476,7 @@
 		//alert("returnArray");
 		var txt = "";
 		var obj = array;
-		for(var i = 0; i< (count/4); i++)
+		for(var i = 0; i< (count/4)-1; i++)
 		{	
 			//alert(obj);
 			//document.getElementById("playernames"+i).innerText = "";
@@ -518,8 +518,18 @@
 		   	    }
 		   	    else
 		   	    {
-		   	    	var index = nameScores.indexOf(n);
-		   	    	nameScores[index] = {name: n, score: s};
+		   	    	//alert("name in array");
+		   	    	//var index = nameScores.indexOf(n);
+		   	    	//nameScores[index] = {name: n, score: s};
+		   	    	
+
+					nameScores.forEach(function(obj) {
+						//alert(obj.name);
+					    if (obj.name === n) {
+					        obj.score = s;
+					    }
+					});
+					alert(JSON.stringify(nameScores));
 		   	    }
 		   	    //alert(JSON.stringify(nameScores));
 

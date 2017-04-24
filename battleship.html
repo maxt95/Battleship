@@ -50,6 +50,11 @@
 	}
 </style>
 <script>
+
+window.onload = function() {
+	createDivs();
+}
+
 	var nameScores = [];
 
 
@@ -289,21 +294,22 @@
 
 	function finalScores() {
 		//alert("finalScores");
+		
 		endgame = true;
-		xmlhttp = new XMLHttpRequest();
-		xmlhttp.onreadystatechange = function() {
-			var result = JSON.parse(xmlhttp.responseText);
-			//alert(result);
-			finals1(result);
-			
-		};
 		
 		
-		xmlhttp.open("POST", "player.php", true);
-		xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		for(var i =0; i < players.length; i++)
 		{
 			
+			xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function() {
+				var result = JSON.parse(xmlhttp.responseText);
+			//alert(result);
+				finals1(result);
+			
+			};
+			xmlhttp.open("POST", "player.php", true);
+			xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xmlhttp.send(JSON.stringify(players[i]));
 		}
 		
@@ -712,7 +718,7 @@
 
 </script>
 </head>
-	<body onload="createDivs()">
+	<body>
 		<script>
 
 			
@@ -748,6 +754,9 @@
 			</script>
 		</div>
 		<div class="right-panel">
+			<div id="but">
+			<button type="button" onclick="createDivs()">Show scores</button>
+			</div>
 			<div id="playernames">
 			Scores:
 			</div>

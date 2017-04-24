@@ -232,9 +232,10 @@
 		    }
 	}
 	var endgame = false;
-	var finals = "";
+	var finals = [];
 	function finals(s)
 	{
+		finals.push(s);
 		finals += "\n" + s;
 		alert(finals);
 	}
@@ -484,13 +485,23 @@
 			var score = obj.map(function(b) {return b.score;});
 			//alert(result+": " +score);
 			
-			txt = name + ": " + score + "\n";
+			txt = name[i] + ": " + score[i];
 			//alert(txt);
 			document.getElementById("playernames"+i).innerText = txt;
 			//alert(txt);
 		}
 		
         //document.getElementById("playernames").innerText = txt;
+	}
+	function populateArray(array,n,s) {
+		alert(array);
+		for (var i = 0; i < array.length; i++) {
+						//alert(nameScores[0].name);
+					    if (array[i].name === n) {
+					        array[i].score = s;
+					    }
+					}
+					nameScores = array;
 	}
 	function getOtherScores(player) {
 		var xmlhttp;
@@ -515,22 +526,19 @@
 		   	    if (!found) { 
 		   	    	nameScores.push({username: n, score: s}); 
 		   	    	players.push(n);
+
 		   	    }
-		   	    else
-		   	    {
+		   	    
+		   	    
 		   	    	//alert("name in array");
 		   	    	//var index = nameScores.indexOf(n);
 		   	    	//nameScores[index] = {name: n, score: s};
 		   	    	
-
-					nameScores.forEach(function(obj) {
-						//alert(obj.name);
-					    if (obj.name === n) {
-					        obj.score = s;
-					    }
-					});
-					alert(JSON.stringify(nameScores));
-		   	    }
+		   	    	populateArray(nameScores,n,s);
+		   	    	
+					
+					//alert(JSON.stringify(nameScores));
+		   	    
 		   	    //alert(JSON.stringify(nameScores));
 
 		   	    

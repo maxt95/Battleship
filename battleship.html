@@ -235,19 +235,19 @@
 	var finals = [];
 	function finals1(s)
 	{
-		finals.push(s);
-		finals += "\n" + s;
-		alert(players.length + " : " + count/4);
+		//finals.push(s);
+		//finals += "\n" + s;
+		//alert(players.length + " : " + count/4);
 
 		if(players.length === count/4)
 		{
-			alert("inside if");
+			
 			var lowest = Number.POSITIVE_INFINITY;
 			var highest = Number.NEGATIVE_INFINITY;
 			var tmp;
 			for (var i=nameScores.length-1; i>=0; i--) {
 			    tmp = nameScores[i].score;
-			    alert(tmp);
+			    alert(nameScores[i]);
 			    if (tmp < lowest) lowest = tmp;
 			    if (tmp > highest) highest = tmp;
 			}
@@ -279,7 +279,7 @@
 		//lives--;
         //alert("Lives: " + lives);
         setSessionPlayers();
-		if(lives === 1)
+		if(lives === 0)
 		{
 			finalScores();
 		}

@@ -232,23 +232,34 @@
 		    }
 	}
 	var endgame = false;
+	var finals = "";
+	function finals(s)
+	{
+		finals += "\n" + s;
+		alert(finals);
+	}
 	function finalScores() {
 		endgame = true;
 		xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function() {
 			var result = JSON.parse(xmlhttp.responseText);
-			alert("final score " + result);
+			alert(result);
+			finals(result);
+			
 		};
 		xmlhttp.open("POST", "player.php", true);
 		xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		
+		var cook = readCookie('username');
+		players.push(cook);
 		for(var i =0; i < players.length; i++)
 		{
 			xmlhttp.send(JSON.stringify(players[i]));
 		}
 		
 	}
+	var youOut = false;
 	function subtractPlayers() {
+		youOut = true;
 		lives--;
 		if(lives === 1)
 		{
@@ -275,10 +286,13 @@
 					tableText(loc, result);
 					if(death == 4)
 					{
-
-						createCookie("alive", "false", 7);
-						alert("You are dead.");
-						subtractPlayers();
+						if(!youOut)
+						{
+							createCookie("alive", "false", 7);
+							alert("You are dead.");
+							subtractPlayers();
+						}
+						
 					}
 				}
 				
@@ -505,7 +519,7 @@
 		   	    else
 		   	    {
 		   	    	var index = nameScores.indexOf(n);
-		   	    	//nameScores[index] = {name: n, score: s};
+		   	    	nameScores[index] = {name: n, score: s};
 		   	    }
 		   	    //alert(JSON.stringify(nameScores));
 

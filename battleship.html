@@ -241,7 +241,8 @@
 		var cook = readCookie('username');
 		if(players.length === count/4)
 		{
-			nameScores.push({username: cook, score: score}); 
+			//alert(score);
+			//nameScores.push({username: cook, score: score}); 
 			var lowest = Number.POSITIVE_INFINITY;
 			var highest = Number.NEGATIVE_INFINITY;
 			var tmp;
@@ -255,12 +256,25 @@
 			var winners = "";
 			for (var i=0; i < nameScores.length; i++) {
 		        if (nameScores[i].score === highest) {
-		            winners += "winner(s) " + JSON.stringify(nameScores[i].username);
+		        	if(highest > score)
+		        	{
+						winners = "winner " + JSON.stringify(nameScores[i].username) + ": " + highest;
+		        	}
+		        	if(highest === score)
+		        	{
+		        		winners += "winners "+ "\n" + JSON.stringify(nameScores[i].username) + ": " + highest + "\n" + cook +": " + score;
+		        	}
+		        	if(score> highest)
+		        	{
+		        		winners = "winner " + cook +": " + score;
+		        	}
+		            
 		        }
     		}
     		alert(winners);
 		}
 	}
+
 	function finalScores() {
 		endgame = true;
 		xmlhttp = new XMLHttpRequest();
@@ -287,8 +301,9 @@
 		//lives--;
         //alert("Lives: " + lives);
         setSessionPlayers();
-		if(lives === 0)
+		if(lives === 1)
 		{
+			createCookie("alive", "false", 7);
 			finalScores();
 		}
 	}
@@ -335,6 +350,7 @@
 					var death = status[i][3];
 					var loc = table.rows[y].cells[x];
 					tableText(loc, result);
+					
 					if(death == 4)
 					{
 						if(!youOut)
@@ -343,6 +359,7 @@
 							alert("You are dead.");
 							subtractPlayers();
 						}
+						
 						
 					}
 				}
@@ -728,31 +745,37 @@
 		<script>
 			var cook = readCookie("alive");
 				
-				if(!endgame)
-				{
+				
 					window.setInterval(function(){
+						//alert("lives remaining: " + " " + lives);
 						
+						//alert(cook);
+						getScores();
+						getOtherPlayers();
+	                    updateLives();
+	                    //alert(lives);
+	                    if(lives === 1) 
+	                    {
+	                    	createCookie("alive", "false", 7);
+	                        finalScores();
+	                        
+	                    }
+						if(cook=="true")
+						{
+							updateShip();	
+							timer();
+						}
 					
-					//alert(cook);
-					getScores();
-					getOtherPlayers();
-                    updateLives();
-                    //alert(lives);
-                    if(lives === 1) {
-                        finalScores();
-                    }
-					if(cook=="true")
-					{
-						updateShip();	
-						timer();
-					}
-					
-				}, 3000);
+					}, 3000);
 				if(cook=="true")
                     {
-                        tableClick();
+                    	if(!endgame)
+                    	{
+                    		tableClick();
+                    	}
+                        
                     }
-				}
+				
 				
 		</script>
 	</body>

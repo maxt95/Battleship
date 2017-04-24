@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>NAXJO Battleship</title>
+<style>
+    body, html {
+        font-size: 28px;
+        font-family: monospace;
+        background-color: lightgrey;
+    }
+    header {
+        background-color: dodgerblue;
+        text-align: center;
+        display: table-cell;
+        vertical-align: middle;
+        
+    }
+    button {
+        font-size: 20px;
+        font-family: monospace;
+        background-color: powderblue;
+    }
+    input {
+        font-size: 20px;
+        font-family: monospace;
+        background-color: whitesmoke;
+    }
+</style>
+<script>
+    
+    var xmlhttp;
+    var xmlhttp5;
+    var xmlhttp3;
+    var xmlhttp2;
+    
+    function createUser() {
+        var name = document.getElementById("make_name").value;
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("POST", "joinRoom.php", true);
+        xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                //alert("Room Code: " + code);
+            }
+        };
+        
+        xmlhttp.send(name);
+        
+    }
+
+    // Creates the host player and the game room
+    function createRoom() {
+        var name = document.getElementById("make_name").value;
+        if (name.length == 0) {
+            alert("Error: Please enter a username")
+        }
+        else {
+            var code = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 4).toLocaleUpperCase();
+            xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    //alert("Room Code: " + code);
+                }
+            };
+            xmlhttp.open("POST", "createRoom.php", true);
+            xmlhttp.send(code);
+            
+            xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    //alert("Room Code: " + code);
+                }
+            };
+            xmlhttp.open("POST", "createKing.php", true);
+            xmlhttp.send(name);
+            eraseCookie("username");
+            eraseCookie("alive");
+            createCookie("username",name,7);
+            createCookie("alive", "true",7);
+
+            window.location = 'loading.html';
+        }
+    }
+    
+    // Allows a player to join a current game room
+    function joinRoom() {
+        var name = document.getElementById("join_name").value;
+        var code = document.getElementById("join_RC").value;
+        if (name.length == 0) {
+            alert("Error: Please enter a username")
+        }
+        else if (code.length != 4) {
+            alert("Error: Please enter a 4-letter code")
+        }
+        else {
+            if (checkRoomNumber(code) == false) {
+                alert("Error: Please enter a correct room code");
+            }
+            else {
+                if (checkPlayerName(name) == true) {
+                    alert("Error: Please enter a unique player name")
+                }
+                else {
+                    var num = getPlayerCount();
+                    if (num >= 15) {
+                        alert("Error: Max number of players reached")
+                    }
+                    else {
+                        if (isInGame() == true) {
+                            alert("Error: Game already in session");
+                        }
+                        else {
+                            xmlhttp = new XMLHttpRequest();
+                            xmlhttp.onreadystatechange = function() {
+                                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                                    // alert
+                                }
+                            };
+                            xmlhttp.open("POST", "joinRoom.php", true);
+                            xmlhttp.send(JSON.stringify(name));
+                            eraseCookie("username");
+                            eraseCookie("alive");
+                            createCookie("username",name,7);
+                            createCookie("alive", "true",7);
+                            window.location = 'loading.html';
+                       }
+                    }
+                }
+            }
+        }
+    }
+    
+    function checkRoomNumber(code) {
+        var result = null;
+        
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                temp = JSON.parse(xmlhttp.responseText);
+                codeMatch = code.localeCompare(temp[0]);
+                result = codeMatch;
+            }
+        }
+        xmlhttp.open("GET", "getInfo.php", false);
+        xmlhttp.send(null);
+        if (result == 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+        
+        
+    }
+    
+    function checkPlayerName(name) {
+        var match = false;
+        var result = null;
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                result = JSON.parse(xmlhttp.responseText);
+            }
+        };
+        xmlhttp.open("GET", "getInfo.php", false);
+        xmlhttp.send();
+        for (key in result) {
+            if (result[key].localeCompare(name) == 0) {
+                match = true;
+            }
+        }
+        return match;
+    }
+    
+    function getPlayerCount() {
+        xmlhttp5 = new XMLHttpRequest();
+        xmlhttp5.onreadystatechange = function() {
+            if (xmlhttp5.readyState == 4 && xmlhttp5.status == 200) {
+                result = JSON.parse(xmlhttp5.responseText);
+            }
+        };
+        xmlhttp5.open("GET", "getPlayerNum.php", false);
+        xmlhttp5.send();
+        return result;
+    }
+    
+    function isInGame() {
+        var result = null;
+        xmlhttp2 = new XMLHttpRequest();
+        xmlhttp2.onreadystatechange = function() {
+            if (xmlhttp2.readyState == 4 && xmlhttp2.status == 200) {
+                result = JSON.parse(xmlhttp2.responseText);
+            }
+        };
+        xmlhttp2.open("GET", "getInGame.php", false);
+        xmlhttp2.send();
+        if (result == true) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    function createCookie(name,value,days) {
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime()+(days*24*60*60*1000));
+            var expires = "; expires="+date.toGMTString();
+        }
+        else var expires = "";
+        document.cookie = name+"="+value+expires+"; path=/";
+    }
+
+    function eraseCookie(name) {
+        createCookie(name,"",-1);
+    }
+    
+</script>
+</head>
+<body>
+
+    <center>
+    <H1>Welcome to NAXJO Battleship</H1>
+    <p>Create a Room for Your Group or Join Another Game</p>
+    <BR></BR>
+    <form>
+
+        <label for="make_name">Username:</label>
+        <input type = "name" name = "make_name" id = "make_name" maxlength = 12>
+        <BR></BR>
+        <button type = "button" onclick = "createRoom()">Create Room</button>
+        <BR></BR>
+        <BR></BR>
+        <label for="join_name">Username:</label>
+        <input type = "name" name = "join_name" id = "join_name" maxlength = 12>
+        <BR></BR>
+        <label for="join_RC">Room Code:</label>
+        <input type = "roomcode" name = "join_RC" id = "join_RC" maxlength = 4>
+        <BR></BR>
+        <button type = "button" onclick = "joinRoom()">Join Room</button>
+    </form>
+    </center>
+</body>
+</html>
